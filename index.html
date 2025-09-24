@@ -290,33 +290,33 @@
             populateProvinces();
         }
 
-        function populateProvinces() {
-            const provinceSelect = document.getElementById('studentProvince');
-            provinces.forEach(province => {
-                const option = document.createElement('option');
-                option.value = province.name_th;
-                option.textContent = province.name_th;
-                provinceSelect.appendChild(option);
-            });
+   function populateProvinces() {
+    const provinceSelect = document.getElementById('studentProvince');
+    provinces.forEach(province => {
+        const option = document.createElement('option');
+        option.value = province.provinceCode;      // หรือใช้ provinceNameTh ก็ได้
+        option.textContent = province.provinceNameTh; // ใช้ property จริงตาม JSON
+        provinceSelect.appendChild(option);
+    });
         }
 
-        function updateDistricts() {
-            const provinceSelect = document.getElementById('studentProvince');
-            const districtSelect = document.getElementById('studentDistrict');
-            const selectedProvince = provinceSelect.value;
+function updateDistricts() {
+    const provinceSelect = document.getElementById('studentProvince');
+    const districtSelect = document.getElementById('studentDistrict');
+    const selectedProvinceCode = parseInt(provinceSelect.value);
 
-            districtSelect.innerHTML = '<option value="">เลือกอำเภอ</option>';
+    districtSelect.innerHTML = '<option value="">เลือกอำเภอ</option>';
 
-            if (!selectedProvince) return;
+    if (!selectedProvinceCode) return;
 
-            districts
-                .filter(d => d.province_name_th === selectedProvince)
-                .forEach(district => {
-                    const option = document.createElement('option');
-                    option.value = district.name_th;
-                    option.textContent = district.name_th;
-                    districtSelect.appendChild(option);
-                });
+    districts
+        .filter(d => d.provinceCode === selectedProvinceCode)
+        .forEach(district => {
+            const option = document.createElement('option');
+            option.value = district.districtCode; // สมมติใน JSON อำเภอมี districtCode
+            option.textContent = district.districtNameTh;
+            districtSelect.appendChild(option);
+        });
         }
 
         loadGeographyData();
