@@ -99,10 +99,36 @@
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                    placeholder="กรอกอีเมล">
                         </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2 required">ชื่อโรงเรียน</label>
+                            <input type="text" id="studentSchool" name="studentSchool" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   placeholder="กรอกชื่อโรงเรียน">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2 required">จังหวัด</label>
+                                <select id="studentProvince" name="studentProvince" required 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        onchange="updateDistricts()">
+                                    <option value="">เลือกจังหวัด</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2 required">อำเภอ</label>
+                                <select id="studentDistrict" name="studentDistrict" required 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">เลือกจังหวัดก่อน</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- ส่วนที่ 2: ข้อมูลผู้ปกครอง -->
+ <!-- ส่วนที่ 2: ข้อมูลผู้ปกครอง -->
                 <div class="mb-8">
                     <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b-2 border-green-500 pb-2">
                         ส่วนที่ 2: ข้อมูลผู้ปกครอง
@@ -243,136 +269,57 @@
         </div>
     </div>
 
+                <!-- ผมขอย่อให้เหลือ script ด้านล่าง -->
+
+            </form>
+        </div>
+    </div>
+
     <script>
-        function handleFileUpload(input) {
-            const file = input.files[0];
-            if (file) {
-                const fileName = document.getElementById('fileName');
-                const filePreview = document.getElementById('filePreview');
-                
-                fileName.textContent = file.name;
-                filePreview.classList.remove('hidden');
-            }
+        let provinces = [];
+        let districts = [];
+
+        // โหลด JSON จาก GitHub
+        async function loadGeographyData() {
+            const provincesResponse = await fetch('https://your-github-url/provinces.json');
+            provinces = await provincesResponse.json();
+            
+            const districtsResponse = await fetch('https://your-github-url/districts.json');
+            districts = await districtsResponse.json();
+
+            populateProvinces();
         }
 
-        document.getElementById('mainForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Validate required fields
-            const requiredFields = [
-                'studentId', 'studentPrefix', 'studentFirstName', 'studentLastName', 'studentGrade',
-                'parentPrefix', 'parentFirstName', 'parentLastName', 'parentPhone',
-                'paymentSlip'
-            ];
-            
-            let isValid = true;
-            for (let field of requiredFields) {
-                const element = document.getElementById(field);
-                if (!element.value) {
-                    element.classList.add('border-red-500');
-                    isValid = false;
-                } else {
-                    element.classList.remove('border-red-500');
-                }
-            }
-            
-            if (!isValid) {
-                alert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน');
-                return;
-            }
-
-            // Validate ID card number
-            const studentId = document.getElementById('studentId').value;
-            if (studentId.length !== 13 || !/^\d+$/.test(studentId)) {
-                alert('กรุณากรอกเลขบัตรประจำตัวประชาชนให้ถูกต้อง (13 หลัก)');
-                return;
-            }
-
-            // Collect form data
-            const formData = {
-                studentId: document.getElementById('studentId').value,
-                studentPrefix: document.getElementById('studentPrefix').value,
-                studentFirstName: document.getElementById('studentFirstName').value,
-                studentLastName: document.getElementById('studentLastName').value,
-                studentGrade: document.getElementById('studentGrade').value,
-                studentPhone: document.getElementById('studentPhone').value,
-                studentEmail: document.getElementById('studentEmail').value,
-                parentPrefix: document.getElementById('parentPrefix').value,
-                parentFirstName: document.getElementById('parentFirstName').value,
-                parentLastName: document.getElementById('parentLastName').value,
-                parentPhone: document.getElementById('parentPhone').value,
-                parentEmail: document.getElementById('parentEmail').value,
-                paymentSlip: document.getElementById('paymentSlip').files[0]?.name || 'ไฟล์ที่อัปโหลด',
-                timestamp: new Date().toLocaleString('th-TH')
-            };
-
-            // Show confirmation page
-            showConfirmation(formData);
-            
-            // Here you would normally send data to Google Sheets
-            // This is a demo version - in real implementation you'd need Google Apps Script
-            console.log('ข้อมูลที่จะส่งไป Google Sheets:', formData);
-        });
-
-        function showConfirmation(data) {
-            document.getElementById('registrationForm').classList.add('hidden');
-            document.getElementById('confirmationPage').classList.remove('hidden');
-            
-            const confirmationData = document.getElementById('confirmationData');
-            confirmationData.innerHTML = `
-                <div class="bg-blue-50 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-blue-800 mb-4">ข้อมูลนักเรียน</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div><span class="font-medium">เลขบัตรประชาชน:</span> ${data.studentId}</div>
-                        <div><span class="font-medium">ชื่อ-นามสกุล:</span> ${data.studentPrefix}${data.studentFirstName} ${data.studentLastName}</div>
-                        <div><span class="font-medium">ระดับชั้น:</span> ${data.studentGrade}</div>
-                        <div><span class="font-medium">เบอร์โทร:</span> ${data.studentPhone || '-'}</div>
-                        <div class="md:col-span-2"><span class="font-medium">อีเมล:</span> ${data.studentEmail || '-'}</div>
-                    </div>
-                </div>
-                
-                <div class="bg-green-50 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-green-800 mb-4">ข้อมูลผู้ปกครอง</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div><span class="font-medium">ชื่อ-นามสกุล:</span> ${data.parentPrefix}${data.parentFirstName} ${data.parentLastName}</div>
-                        <div><span class="font-medium">เบอร์โทร:</span> ${data.parentPhone}</div>
-                        <div class="md:col-span-2"><span class="font-medium">อีเมล:</span> ${data.parentEmail}</div>
-                    </div>
-                </div>
-                
-                <div class="bg-orange-50 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-orange-800 mb-4">การยืนยันการลงทะเบียน</h3>
-                    <div class="text-sm">
-                        <div><span class="font-medium">สลิปการโอนเงิน:</span> ${data.paymentSlip}</div>
-                        <div><span class="font-medium">วันที่ลงทะเบียน:</span> ${data.timestamp}</div>
-                    </div>
-                </div>
-                
-                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <p class="text-yellow-800 text-sm">
-                        <strong>หมายเหตุ:</strong> ทางโรงเรียนจะตรวจสอบข้อมูลและสลิปการโอนเงิน หากข้อมูลถูกต้องจะแจ้งผลการรับสมัครภายใน 3-5 วันทำการ
-                    </p>
-                </div>
-            `;
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
+        function populateProvinces() {
+            const provinceSelect = document.getElementById('studentProvince');
+            provinces.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province.name_th;
+                option.textContent = province.name_th;
+                provinceSelect.appendChild(option);
+            });
         }
 
-        function resetForm() {
-            document.getElementById('mainForm').reset();
-            document.getElementById('filePreview').classList.add('hidden');
-            document.getElementById('confirmationPage').classList.add('hidden');
-            document.getElementById('registrationForm').classList.remove('hidden');
-            window.scrollTo(0, 0);
+        function updateDistricts() {
+            const provinceSelect = document.getElementById('studentProvince');
+            const districtSelect = document.getElementById('studentDistrict');
+            const selectedProvince = provinceSelect.value;
+
+            districtSelect.innerHTML = '<option value="">เลือกอำเภอ</option>';
+
+            if (!selectedProvince) return;
+
+            districts
+                .filter(d => d.province_name_th === selectedProvince)
+                .forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district.name_th;
+                    option.textContent = district.name_th;
+                    districtSelect.appendChild(option);
+                });
         }
 
-        // Format ID card input
-        document.getElementById('studentId').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 13) value = value.slice(0, 13);
-            e.target.value = value;
-        });
+        loadGeographyData();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9842f5382775d334',t:'MTc1ODcyMzk5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
