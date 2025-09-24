@@ -44,15 +44,29 @@
             <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">แบบฟอร์มลงทะเบียน</h2>
             
             <form id="studentForm" class="space-y-6">
-                <div class="grid md:grid-cols-2 gap-6">
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- คำนำหน้า -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">คำนำหน้า *</label>
+                        <select id="prefix" name="prefix" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                            <option value="">เลือกคำนำหน้า</option>
+                            <option value="เด็กชาย">เด็กชาย</option>
+                            <option value="เด็กหญิง">เด็กหญิง</option>
+                        </select>
+                    </div>
+
+                    <!-- ชื่อ -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">ชื่อ *</label>
-                        <input type="text" id="firstName" name="firstName" required 
+                        <input type="text" id="firstName" name="firstName" required
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
                     </div>
+
+                    <!-- นามสกุล -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">นามสกุล *</label>
-                        <input type="text" id="lastName" name="lastName" required 
+                        <input type="text" id="lastName" name="lastName" required
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
                     </div>
                 </div>
@@ -189,36 +203,26 @@
             const submitText = document.getElementById('submitText');
             const loadingSpinner = document.getElementById('loadingSpinner');
             
-            // Show loading state
             submitBtn.disabled = true;
             submitText.classList.add('hidden');
             loadingSpinner.classList.remove('hidden');
             
-            // Collect form data
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
             data.timestamp = new Date().toLocaleString('th-TH');
             data.registrationId = 'REG' + Date.now();
             
             try {
-                // Send to Google Sheets
                 await sendToGoogleSheets(GOOGLE_SCRIPT_URL, data);
-                
-                // Store locally as backup
                 registrations.push(data);
                 localStorage.setItem('registrations', JSON.stringify(registrations));
-                
-                // Show success message
                 showSuccessMessage(data);
-                
             } catch (error) {
                 console.error('Error:', error);
-                // Still store locally and show success
                 registrations.push(data);
                 localStorage.setItem('registrations', JSON.stringify(registrations));
                 showSuccessMessage(data);
             } finally {
-                // Reset button state
                 submitBtn.disabled = false;
                 submitText.classList.remove('hidden');
                 loadingSpinner.classList.add('hidden');
@@ -226,29 +230,25 @@
         });
 
         async function sendToGoogleSheets(url, data) {
-            const response = await fetch(url, {
+            await fetch(url, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-            // Note: no-cors mode means we can't read the response, but the request is sent
         }
 
         function showSuccessMessage(data) {
             document.getElementById('registrationForm').classList.add('hidden');
             document.getElementById('successMessage').classList.remove('hidden');
             
-            // Populate registration details
             const detailsDiv = document.getElementById('registrationDetails');
             detailsDiv.innerHTML = `
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div><strong>รหัสการลงทะเบียน:</strong></div>
                     <div class="text-blue-600 font-mono">${data.registrationId}</div>
                     <div><strong>ชื่อ-นามสกุล:</strong></div>
-                    <div>${data.firstName} ${data.lastName}</div>
+                    <div>${data.prefix} ${data.firstName} ${data.lastName}</div>
                     <div><strong>ชั้นปี:</strong></div>
                     <div>${data.grade}</div>
                     <div><strong>โรงเรียน:</strong></div>
@@ -270,10 +270,7 @@
             const studentId = document.getElementById('checkStudentId').value.trim();
             const statusResult = document.getElementById('statusResult');
             
-            if (!studentId) {
-                alert('กรุณาใส่เลขประจำตัวนักเรียน');
-                return;
-            }
+            if (!studentId) { alert('กรุณาใส่เลขประจำตัวนักเรียน'); return; }
             
             const registration = registrations.find(reg => reg.studentId === studentId);
             
@@ -288,7 +285,7 @@
                         </div>
                         <div class="grid grid-cols-2 gap-3 text-sm">
                             <div><strong>รหัส:</strong> ${registration.registrationId}</div>
-                            <div><strong>ชื่อ:</strong> ${registration.firstName} ${registration.lastName}</div>
+                            <div><strong>ชื่อ:</strong> ${registration.prefix} ${registration.firstName} ${registration.lastName}</div>
                             <div><strong>ชั้นปี:</strong> ${registration.grade}</div>
                             <div><strong>โรงเรียน:</strong> ${registration.school}</div>
                             <div><strong>ประเภท:</strong> ${registration.category}</div>
@@ -330,5 +327,5 @@
             document.getElementById('registrationForm').classList.remove('hidden');
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98407249e6577331',t:'MTc1ODY5NzY2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
