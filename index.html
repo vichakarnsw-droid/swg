@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ลงทะเบียนแข่งขัน เพชรสามร้อยยอด</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .success-animation { animation: slideInUp 0.5s ease-out; }
+        @keyframes slideInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="bg-white rounded-full w-24 h-24 mx-auto mb-4 flex items-center justify-center shadow-lg">
+                <span class="text-4xl">💎</span>
+            </div>
+            <h1 class="text-4xl font-bold text-white mb-2">เพชรสามร้อยยอด</h1>
+            <p class="text-white/90 text-lg">ลงทะเบียนเข้าร่วมการแข่งขัน</p>
+        </div>
+
+        <!-- Registration Form -->
+        <div id="registrationForm" class="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl p-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">แบบฟอร์มลงทะเบียน</h2>
+            
+            <form id="studentForm" class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">ชื่อ *</label>
+                        <input type="text" id="firstName" name="firstName" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">นามสกุล *</label>
+                        <input type="text" id="lastName" name="lastName" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">ชั้นปี *</label>
+                        <select id="grade" name="grade" required 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                            <option value="">เลือกชั้นปี</option>
+                            <option value="ม.1">ม.1</option>
+                            <option value="ม.2">ม.2</option>
+                            <option value="ม.3">ม.3</option>
+                            <option value="ม.4">ม.4</option>
+                            <option value="ม.5">ม.5</option>
+                            <option value="ม.6">ม.6</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">เลขประจำตัวนักเรียน *</label>
+                        <input type="text" id="studentId" name="studentId" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">โรงเรียน *</label>
+                    <input type="text" id="school" name="school" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">เบอร์โทรศัพท์ *</label>
+                        <input type="tel" id="phone" name="phone" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">อีเมล</label>
+                        <input type="email" id="email" name="email" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">ประเภทการแข่งขัน *</label>
+                    <select id="category" name="category" required 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                        <option value="">เลือกประเภทการแข่งขัน</option>
+                        <option value="คณิตศาสตร์">คณิตศาสตร์</option>
+                        <option value="วิทยาศาสตร์">วิทยาศาสตร์</option>
+                        <option value="ภาษาไทย">ภาษาไทย</option>
+                        <option value="ภาษาอังกฤษ">ภาษาอังกฤษ</option>
+                        <option value="สังคมศึกษา">สังคมศึกษา</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">หมายเหตุ</label>
+                    <textarea id="notes" name="notes" rows="3" 
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                              placeholder="ข้อมูลเพิ่มเติม (ถ้ามี)"></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn" 
+                        class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                    <span id="submitText">ลงทะเบียน</span>
+                    <div id="loadingSpinner" class="loading-spinner mx-auto hidden"></div>
+                </button>
+            </form>
+
+            <!-- Google Sheets Setup Instructions -->
+            <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <h3 class="font-semibold text-yellow-800 mb-2">📋 วิธีการตั้งค่า Google Sheets:</h3>
+                <ol class="text-sm text-yellow-700 space-y-1 list-decimal list-inside">
+                    <li>สร้าง Google Sheets ใหม่</li>
+                    <li>ไปที่ Extensions → Apps Script</li>
+                    <li>วางโค้ด Google Apps Script ที่ให้ไว้</li>
+                    <li>Deploy เป็น Web App และคัดลอก URL มาใส่ในช่องด้านล่าง</li>
+                </ol>
+                <div class="mt-3">
+                    <label class="block text-sm font-medium text-yellow-800 mb-1">URL ของ Google Apps Script:</label>
+                    <input type="url" id="scriptUrl" 
+                           class="w-full px-3 py-2 border border-yellow-300 rounded focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                           placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl p-8 hidden success-animation">
+            <div class="text-center">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-green-600 mb-2">ลงทะเบียนสำเร็จ! 🎉</h2>
+                <p class="text-gray-600 mb-6">ข้อมูลของคุณได้ถูกบันทึกเรียบร้อยแล้ว</p>
+                
+                <div id="registrationDetails" class="bg-gray-50 rounded-lg p-4 mb-6 text-left">
+                    <!-- Registration details will be populated here -->
+                </div>
+
+                <div class="space-y-3">
+                    <button onclick="checkStatus()" 
+                            class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                        ตรวจสอบสถานะ
+                    </button>
+                    <button onclick="registerAnother()" 
+                            class="w-full bg-gray-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-700 transition-colors">
+                        ลงทะเบียนคนอื่น
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Check -->
+        <div id="statusCheck" class="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl p-8 hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">ตรวจสอบสถานะการลงทะเบียน</h2>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">เลขประจำตัวนักเรียน</label>
+                <div class="flex gap-3">
+                    <input type="text" id="checkStudentId" 
+                           class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <button onclick="performStatusCheck()" 
+                            class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                        ตรวจสอบ
+                    </button>
+                </div>
+            </div>
+
+            <div id="statusResult" class="hidden">
+                <!-- Status result will be shown here -->
+            </div>
+
+            <button onclick="goBack()" 
+                    class="w-full bg-gray-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-700 transition-colors mt-6">
+                กลับหน้าหลัก
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let registrations = JSON.parse(localStorage.getItem('registrations') || '[]');
+
+        document.getElementById('studentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitText.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+            
+            // Collect form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            data.timestamp = new Date().toLocaleString('th-TH');
+            data.registrationId = 'REG' + Date.now();
+            
+            try {
+                // Try to send to Google Sheets if URL is provided
+                const scriptUrl = document.getElementById('scriptUrl').value.trim();
+                if (scriptUrl) {
+                    await sendToGoogleSheets(scriptUrl, data);
+                }
+                
+                // Store locally as backup
+                registrations.push(data);
+                localStorage.setItem('registrations', JSON.stringify(registrations));
+                
+                // Show success message
+                showSuccessMessage(data);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                // Still store locally and show success
+                registrations.push(data);
+                localStorage.setItem('registrations', JSON.stringify(registrations));
+                showSuccessMessage(data);
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                submitText.classList.remove('hidden');
+                loadingSpinner.classList.add('hidden');
+            }
+        });
+
+        async function sendToGoogleSheets(url, data) {
+            const response = await fetch(url, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            // Note: no-cors mode means we can't read the response, but the request is sent
+        }
+
+        function showSuccessMessage(data) {
+            document.getElementById('registrationForm').classList.add('hidden');
+            document.getElementById('successMessage').classList.remove('hidden');
+            
+            // Populate registration details
+            const detailsDiv = document.getElementById('registrationDetails');
+            detailsDiv.innerHTML = `
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div><strong>รหัสการลงทะเบียน:</strong></div>
+                    <div class="text-blue-600 font-mono">${data.registrationId}</div>
+                    <div><strong>ชื่อ-นามสกุล:</strong></div>
+                    <div>${data.firstName} ${data.lastName}</div>
+                    <div><strong>ชั้นปี:</strong></div>
+                    <div>${data.grade}</div>
+                    <div><strong>โรงเรียน:</strong></div>
+                    <div>${data.school}</div>
+                    <div><strong>ประเภทการแข่งขัน:</strong></div>
+                    <div>${data.category}</div>
+                    <div><strong>วันที่ลงทะเบียน:</strong></div>
+                    <div>${data.timestamp}</div>
+                </div>
+            `;
+        }
+
+        function checkStatus() {
+            document.getElementById('successMessage').classList.add('hidden');
+            document.getElementById('statusCheck').classList.remove('hidden');
+        }
+
+        function performStatusCheck() {
+            const studentId = document.getElementById('checkStudentId').value.trim();
+            const statusResult = document.getElementById('statusResult');
+            
+            if (!studentId) {
+                alert('กรุณาใส่เลขประจำตัวนักเรียน');
+                return;
+            }
+            
+            const registration = registrations.find(reg => reg.studentId === studentId);
+            
+            if (registration) {
+                statusResult.innerHTML = `
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="flex items-center mb-3">
+                            <svg class="w-6 h-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-green-800">พบข้อมูลการลงทะเบียน</h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div><strong>รหัส:</strong> ${registration.registrationId}</div>
+                            <div><strong>ชื่อ:</strong> ${registration.firstName} ${registration.lastName}</div>
+                            <div><strong>ชั้นปี:</strong> ${registration.grade}</div>
+                            <div><strong>โรงเรียน:</strong> ${registration.school}</div>
+                            <div><strong>ประเภท:</strong> ${registration.category}</div>
+                            <div><strong>วันที่:</strong> ${registration.timestamp}</div>
+                        </div>
+                        <div class="mt-3 p-3 bg-green-100 rounded">
+                            <p class="text-green-800 font-medium">✅ สถานะ: ลงทะเบียนสำเร็จแล้ว</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                statusResult.innerHTML = `
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div class="flex items-center mb-3">
+                            <svg class="w-6 h-6 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-red-800">ไม่พบข้อมูลการลงทะเบียน</h3>
+                        </div>
+                        <p class="text-red-700">ไม่พบข้อมูลการลงทะเบียนสำหรับเลขประจำตัวนักเรียน: <strong>${studentId}</strong></p>
+                        <div class="mt-3 p-3 bg-red-100 rounded">
+                            <p class="text-red-800 font-medium">❌ สถานะ: ยังไม่ได้ลงทะเบียน</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            statusResult.classList.remove('hidden');
+        }
+
+        function registerAnother() {
+            document.getElementById('successMessage').classList.add('hidden');
+            document.getElementById('registrationForm').classList.remove('hidden');
+            document.getElementById('studentForm').reset();
+        }
+
+        function goBack() {
+            document.getElementById('statusCheck').classList.add('hidden');
+            document.getElementById('registrationForm').classList.remove('hidden');
+        }
+    </script>
+
+    <!-- Google Apps Script Code (Copy this to your Google Apps Script project) -->
+    <script type="text/plain" id="gas-code">
+        // Google Apps Script Code - Copy this to your Apps Script project
+        
+        function doPost(e) {
+            try {
+                const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+                
+                // Set headers if this is the first row
+                if (sheet.getLastRow() === 0) {
+                    sheet.getRange(1, 1, 1, 10).setValues([[
+                        'วันที่ลงทะเบียน', 'รหัสการลงทะเบียน', 'ชื่อ', 'นามสกุล', 
+                        'ชั้นปี', 'เลขประจำตัวนักเรียน', 'โรงเรียน', 'เบอร์โทรศัพท์', 
+                        'อีเมล', 'ประเภทการแข่งขัน', 'หมายเหตุ'
+                    ]]);
+                }
+                
+                const data = JSON.parse(e.postData.contents);
+                
+                // Add data to sheet
+                sheet.appendRow([
+                    data.timestamp,
+                    data.registrationId,
+                    data.firstName,
+                    data.lastName,
+                    data.grade,
+                    data.studentId,
+                    data.school,
+                    data.phone,
+                    data.email || '',
+                    data.category,
+                    data.notes || ''
+                ]);
+                
+                return ContentService
+                    .createTextOutput(JSON.stringify({success: true}))
+                    .setMimeType(ContentService.MimeType.JSON);
+                    
+            } catch (error) {
+                return ContentService
+                    .createTextOutput(JSON.stringify({success: false, error: error.toString()}))
+                    .setMimeType(ContentService.MimeType.JSON);
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9840590033a4732e',t:'MTc1ODY5NjYyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
