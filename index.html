@@ -401,18 +401,30 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
     };
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbyT0wXZdRzEsIz_YhfcE0FBtpAd51_hTHE-dCWj-he8eEocucbmnxsvi9H27GbFvcwo/exec', { // เปลี่ยนเป็น URL ของ Web App
-            method: 'POST',
-            body: JSON.stringify(formData)
-        });
-        const result = await response.json();
-        if (result.result === 'success') {
-            showConfirmation(formData);
-        } else {
-            alert('เกิดข้อผิดพลาด: ' + result.message);
-        }
-    } catch (err) {
-        alert('ไม่สามารถส่งข้อมูลได้: ' + err);
+       const response = await fetch('https://script.google.com/macros/s/AKfycbyT0wXZdRzEsIz_YhfcE0FBtpAd51_hTHE-dCWj-he8eEocucbmnxsvi9H27GbFvcwo/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    });
+    
+    const text = await response.text(); // แก้ตรงนี้ชั่วคราว
+    console.log(text); // ดูข้อความจาก server
+    
+    let result;
+    try {
+        result = JSON.parse(text);
+    } catch {
+        alert('เกิดข้อผิดพลาดจาก server: ' + text);
+        return;
+    }
+
+    if (result.result === 'success') {
+        showConfirmation(formData);
+    } else {
+        alert('เกิดข้อผิดพลาด: ' + result.message);
+    }
+} catch (err) {
+    alert('ไม่สามารถส่งข้อมูลได้: ' + err);
     }
 });
 
