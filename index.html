@@ -25,7 +25,7 @@
 
             <!-- ชื่อโครงการและคำอธิบาย -->
             <div>
-                <h1 class="text-3xl font-bold text-gray-800">โครงการเพชรสามร้อยยอด</h1>
+                <h1 class="text-3xl font-bold text-gray-800">โครงการเพชรสามร้อยยอด123</h1>
                 <p class="text-lg text-gray-600 mt-2">ระบบลงทะเบียนการแข่งขันทดสอบความรู้</p>
             </div>
 
@@ -355,25 +355,27 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
     });
 
     // สร้าง object ส่ง
-    const formData = {
-        studentId: document.getElementById('studentId').value,
-        studentPrefix: document.getElementById('studentPrefix').value,
-        studentFirstName: document.getElementById('studentFirstName').value,
-        studentLastName: document.getElementById('studentLastName').value,
-        studentGrade: document.getElementById('studentGrade').value,
-        studentPhone: document.getElementById('studentPhone').value,
-        studentEmail: document.getElementById('studentEmail').value,
-        studentProvince: document.getElementById('studentProvince').value,
-        studentDistrict: document.getElementById('studentDistrict').value,
-        parentPrefix: document.getElementById('parentPrefix').value,
-        parentFirstName: document.getElementById('parentFirstName').value,
-        parentLastName: document.getElementById('parentLastName').value,
-        parentPhone: document.getElementById('parentPhone').value,
-        parentEmail: document.getElementById('parentEmail').value,
-        paymentSlipBase64: paymentBase64,
-        paymentSlipMime: paymentMime,
-        paymentSlipName: paymentFile.name,
-        timestamp: new Date().toLocaleString('th-TH')
+const formData = {
+    studentId: document.getElementById('studentId').value,
+    studentPrefix: document.getElementById('studentPrefix').value,
+    studentFirstName: document.getElementById('studentFirstName').value,
+    studentLastName: document.getElementById('studentLastName').value,
+    studentGrade: document.getElementById('studentGrade').value,
+    studentPhone: document.getElementById('studentPhone').value,
+    studentEmail: document.getElementById('studentEmail').value,
+    studentSchool: document.getElementById('studentSchool').value, // เพิ่มบรรทัดนี้เข้ามา
+    studentProvince: document.getElementById('studentProvince').value,
+    studentDistrict: document.getElementById('studentDistrict').value,
+    parentPrefix: document.getElementById('parentPrefix').value,
+    parentFirstName: document.getElementById('parentFirstName').value,
+    parentLastName: document.getElementById('parentLastName').value,
+    parentPhone: document.getElementById('parentPhone').value,
+    parentEmail: document.getElementById('parentEmail').value,
+    paymentSlipBase64: paymentBase64,
+    paymentSlipMime: paymentMime,
+    paymentSlipName: paymentFile.name,
+    timestamp: new Date().toLocaleString('th-TH')
+};
     };
 
     try {
