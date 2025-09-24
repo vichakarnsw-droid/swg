@@ -281,10 +281,10 @@
 
         // โหลด JSON จาก GitHub
         async function loadGeographyData() {
-            const provincesResponse = await fetch('https://your-github-url/provinces.json');
+            const provincesResponse = await fetch('https://vichakarnsw-droid.github.io/swg/provinces.json');
             provinces = await provincesResponse.json();
             
-            const districtsResponse = await fetch('https://your-github-url/districts.json');
+            const districtsResponse = await fetch('https://vichakarnsw-droid.github.io/swg/districts.json');
             districts = await districtsResponse.json();
 
             populateProvinces();
