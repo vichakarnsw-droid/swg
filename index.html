@@ -124,21 +124,15 @@
                 </button>
             </form>
 
-            <!-- Google Sheets Setup Instructions -->
-            <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <h3 class="font-semibold text-yellow-800 mb-2">📋 วิธีการตั้งค่า Google Sheets:</h3>
-                <ol class="text-sm text-yellow-700 space-y-1 list-decimal list-inside">
-                    <li>สร้าง Google Sheets ใหม่</li>
-                    <li>ไปที่ Extensions → Apps Script</li>
-                    <li>วางโค้ด Google Apps Script ที่ให้ไว้</li>
-                    <li>Deploy เป็น Web App และคัดลอก URL มาใส่ในช่องด้านล่าง</li>
-                </ol>
-                <div class="mt-3">
-                    <label class="block text-sm font-medium text-yellow-800 mb-1">URL ของ Google Apps Script:</label>
-                    <input type="url" id="scriptUrl" 
-                           class="w-full px-3 py-2 border border-yellow-300 rounded focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                           placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+            <!-- Google Sheets Connection Status -->
+            <div class="mt-8 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <h3 class="font-semibold text-green-800">เชื่อมต่อ Google Sheets เรียบร้อยแล้ว!</h3>
                 </div>
+                <p class="text-sm text-green-700 mt-1">ข้อมูลจะถูกส่งไปยัง Google Sheets อัตโนมัติเมื่อลงทะเบียน</p>
             </div>
         </div>
 
@@ -199,6 +193,9 @@
 
     <script>
         let registrations = JSON.parse(localStorage.getItem('registrations') || '[]');
+        
+        // Your Google Apps Script URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxAQ23lGcThCXFQ17DOfK-OBJpiqv8bAbgTFA-IOb3du-VC_3aLRN1h1HfkVGrYdHCuVQ/exec';
 
         document.getElementById('studentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -219,11 +216,8 @@
             data.registrationId = 'REG' + Date.now();
             
             try {
-                // Try to send to Google Sheets if URL is provided
-                const scriptUrl = document.getElementById('scriptUrl').value.trim();
-                if (scriptUrl) {
-                    await sendToGoogleSheets(scriptUrl, data);
-                }
+                // Send to Google Sheets
+                await sendToGoogleSheets(GOOGLE_SCRIPT_URL, data);
                 
                 // Store locally as backup
                 registrations.push(data);
@@ -351,51 +345,5 @@
             document.getElementById('registrationForm').classList.remove('hidden');
         }
     </script>
-
-    <!-- Google Apps Script Code (Copy this to your Google Apps Script project) -->
-    <script type="text/plain" id="gas-code">
-        // Google Apps Script Code - Copy this to your Apps Script project
-        
-        function doPost(e) {
-            try {
-                const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-                
-                // Set headers if this is the first row
-                if (sheet.getLastRow() === 0) {
-                    sheet.getRange(1, 1, 1, 10).setValues([[
-                        'วันที่ลงทะเบียน', 'รหัสการลงทะเบียน', 'ชื่อ', 'นามสกุล', 
-                        'ชั้นปี', 'เลขประจำตัวนักเรียน', 'โรงเรียน', 'เบอร์โทรศัพท์', 
-                        'อีเมล', 'ประเภทการแข่งขัน', 'หมายเหตุ'
-                    ]]);
-                }
-                
-                const data = JSON.parse(e.postData.contents);
-                
-                // Add data to sheet
-                sheet.appendRow([
-                    data.timestamp,
-                    data.registrationId,
-                    data.firstName,
-                    data.lastName,
-                    data.grade,
-                    data.studentId,
-                    data.school,
-                    data.phone,
-                    data.email || '',
-                    data.category,
-                    data.notes || ''
-                ]);
-                
-                return ContentService
-                    .createTextOutput(JSON.stringify({success: true}))
-                    .setMimeType(ContentService.MimeType.JSON);
-                    
-            } catch (error) {
-                return ContentService
-                    .createTextOutput(JSON.stringify({success: false, error: error.toString()}))
-                    .setMimeType(ContentService.MimeType.JSON);
-            }
-        }
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9840590033a4732e',t:'MTc1ODY5NjYyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98407249e6577331',t:'MTc1ODY5NzY2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
