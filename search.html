@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตรวจสอบข้อมูลการลงทะเบียน - โครงการเพชรสามร้อยยอด</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Sarabun', sans-serif;
+        }
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Header -->
+    <div class="bg-white shadow-lg">
+        <div class="max-w-4xl mx-auto px-6 py-8">
+            <div class="flex items-center justify-center space-x-4">
+                <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                    <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                </div>
+                <div class="text-center">
+                    <h1 class="text-3xl font-bold text-gray-800">โครงการเพชรสามร้อยยอด</h1>
+                    <p class="text-lg text-gray-600 mt-2">ระบบตรวจสอบข้อมูลการลงทะเบียน</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-6 py-8">
+        <!-- Search Form -->
+        <div class="bg-white rounded-xl shadow-xl p-8 mb-8">
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-8">ค้นหาข้อมูลการลงทะเบียน</h2>
+            
+            <form id="searchForm" class="max-w-md mx-auto">
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        เลขบัตรประจำตัวประชาชน
+                    </label>
+                    <input type="text" id="searchId" required maxlength="13" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg"
+                           placeholder="กรอกเลขบัตรประจำตัวประชาชน 13 หลัก">
+                </div>
+                
+                <div class="text-center">
+                    <button type="submit" id="searchBtn" 
+                            class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                        <span id="searchText">ค้นหา</span>
+                        <svg id="loadingIcon" class="hidden inline w-5 h-5 ml-2 loading" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Search Results -->
+        <div id="searchResults" class="hidden">
+            <!-- Student Information -->
+            <div class="bg-white rounded-xl shadow-xl p-8 mb-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800">ข้อมูลการลงทะเบียน</h3>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <span class="text-sm text-green-600 font-medium">ลงทะเบียนแล้ว</span>
+                    </div>
+                </div>
+
+                <div id="studentData" class="space-y-6">
+                    <!-- ข้อมูลนักเรียน -->
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h4 class="text-xl font-semibold text-blue-700 mb-4 border-b-2 border-blue-200 pb-2">
+                            ข้อมูลนักเรียน
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">เลขบัตรประชาชน:</span>
+                                    <p id="displayStudentId" class="text-lg font-semibold text-gray-800"></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">ชื่อนักเรียน:</span>
+                                    <p id="displayStudentName" class="text-lg font-semibold text-gray-800"></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">ระดับชั้น:</span>
+                                    <p id="displayStudentGrade" class="text-lg font-semibold text-gray-800"></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">เบอร์โทรนักเรียน:</span>
+                                    <p id="displayStudentPhone" class="text-lg font-semibold text-gray-800"></p>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">อีเมลนักเรียน:</span>
+                                    <p id="displayStudentEmail" class="text-lg font-semibold text-gray-800"></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">โรงเรียน:</span>
+                                    <p id="displaySchool" class="text-lg font-semibold text-gray-800"></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">จังหวัด:</span>
+                                    <p id="displayProvince" class="text-lg font-semibold text-gray-800"></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">อำเภอ:</span>
+                                    <p id="displayDistrict" class="text-lg font-semibold text-gray-800"></p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ข้อมูลผู้ปกครอง -->
+                    <div class="bg-green-50 rounded-lg p-6">
+                        <h4 class="text-xl font-semibold text-green-700 mb-4 border-b-2 border-green-200 pb-2">
+                            ข้อมูลผู้ปกครอง
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">ชื่อ-นามสกุล:</span>
+                                    <p id="displayParentName" class="text-lg font-semibold text-gray-800"></p>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">เบอร์โทรศัพท์:</span>
+                                    <p id="displayParentPhone" class="text-lg font-semibold text-gray-800"></p>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">อีเมล:</span>
+                                    <p id="displayParentEmail" class="text-lg font-semibold text-gray-800"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- สถานะการชำระเงิน -->
+                    <div class="bg-purple-50 rounded-lg p-6">
+                        <h4 class="text-xl font-semibold text-purple-700 mb-4 border-b-2 border-purple-200 pb-2">
+                            สถานะการชำระเงิน
+                        </h4>
+                        <div>
+                            <div class="flex items-center space-x-3">
+                                <div id="paymentStatusIndicator" class="w-4 h-4 bg-green-500 rounded-full"></div>
+                                <span id="paymentStatusText" class="text-lg font-semibold text-green-600">ชำระเงินแล้ว</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-center space-x-4 mt-8 pt-6 border-t border-gray-200">
+                    <button onclick="printData()" 
+                            class="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors">
+                        พิมพ์ข้อมูล
+                    </button>
+                    <button onclick="searchAnother()" 
+                            class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                        ค้นหาอีกครั้ง
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results -->
+        <div id="noResults" class="hidden bg-white rounded-xl shadow-xl p-8 text-center">
+            <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-red-600 mb-2">ไม่พบข้อมูล</h3>
+            <p class="text-gray-600 mb-6">ไม่พบข้อมูลการลงทะเบียนสำหรับเลขบัตรประชาชนที่ระบุ</p>
+            <button onclick="searchAnother()" 
+                    class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                ค้นหาอีกครั้ง
+            </button>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="hidden bg-white rounded-xl shadow-xl p-8 text-center">
+            <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-yellow-600 mb-2">เกิดข้อผิดพลาด</h3>
+            <p class="text-gray-600 mb-6">ไม่สามารถเชื่อมต่อกับระบบได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง</p>
+            <button onclick="searchAnother()" 
+                    class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                ลองอีกครั้ง
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Google Sheets Configuration
+        const SHEET_ID = '1A8iqQJbo8vMp8ckH1YZyxs7bDhiEdZ1jA7-MdqYDIB0';
+
+        // Function to parse CSV data properly
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            const result = [];
+            
+            for (let line of lines) {
+                if (line.trim() === '') continue;
+                
+                const row = [];
+                let current = '';
+                let inQuotes = false;
+                
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        row.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                row.push(current.trim());
+                result.push(row);
+            }
+            
+            return result;
+        }
+
+        // Function to fetch data from Google Sheets
+        async function fetchFromGoogleSheets(studentId) {
+            try {
+                // Use the public CSV export URL (no API key needed)
+                const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+                
+                const response = await fetch(csvUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const csvText = await response.text();
+                const rows = parseCSV(csvText);
+                
+                if (rows.length > 1) {
+                    const headerRow = rows[0];
+                    
+                    // Find the row with matching student ID
+                    const studentRow = rows.find(row => {
+                        const idIndex = headerRow.findIndex(header => 
+                            header.trim() === 'เลขบัตรประชาชน'
+                        );
+                        return row[idIndex] && row[idIndex].trim() === studentId;
+                    });
+                    
+                    if (studentRow) {
+                        const getColumnValue = (headerName) => {
+                            const index = headerRow.findIndex(header => 
+                                header.trim() === headerName
+                            );
+                            return index !== -1 ? (studentRow[index] || '').trim() : '';
+                        };
+                        
+                        return {
+                            studentId: getColumnValue('เลขบัตรประชาชน'),
+                            studentName: getColumnValue('ชื่อนักเรียน'),
+                            studentGrade: getColumnValue('ระดับชั้น'),
+                            studentPhone: getColumnValue('เบอร์โทรนักเรียน'),
+                            studentEmail: getColumnValue('อีเมลนักเรียน'),
+                            school: getColumnValue('โรงเรียน'),
+                            province: getColumnValue('จังหวัด'),
+                            district: getColumnValue('อำเภอ'),
+                            parentName: getColumnValue('ชื่อผู้ปกครอง'),
+                            parentPhone: getColumnValue('เบอร์โทรผู้ปกครอง'),
+                            parentEmail: getColumnValue('อีเมลผู้ปกครอง'),
+                            paymentStatus: getColumnValue('สถานะ')
+                        };
+                    }
+                }
+                
+                return null;
+            } catch (error) {
+                console.error('Error fetching data from Google Sheets:', error);
+                throw error;
+            }
+        }
+
+        // ID card input validation
+        document.getElementById('searchId').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 13) value = value.slice(0, 13);
+            e.target.value = value;
+        });
+
+        // Form submission
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const searchId = document.getElementById('searchId').value;
+            
+            if (searchId.length !== 13) {
+                alert('กรุณากรอกเลขบัตรประชาชนให้ครบ 13 หลัก');
+                return;
+            }
+
+            searchStudent(searchId);
+        });
+
+        async function searchStudent(studentId) {
+            // Show loading state
+            const searchBtn = document.getElementById('searchBtn');
+            const searchText = document.getElementById('searchText');
+            const loadingIcon = document.getElementById('loadingIcon');
+            
+            searchBtn.disabled = true;
+            searchText.textContent = 'กำลังค้นหา...';
+            loadingIcon.classList.remove('hidden');
+            
+            // Hide previous results
+            hideAllResults();
+
+            try {
+                const studentData = await fetchFromGoogleSheets(studentId);
+                
+                // Reset button state
+                searchBtn.disabled = false;
+                searchText.textContent = 'ค้นหา';
+                loadingIcon.classList.add('hidden');
+                
+                if (studentData) {
+                    displayStudentData(studentData);
+                } else {
+                    showNoResults();
+                }
+                
+            } catch (error) {
+                console.error('Search error:', error);
+                
+                // Reset button state
+                searchBtn.disabled = false;
+                searchText.textContent = 'ค้นหา';
+                loadingIcon.classList.add('hidden');
+                
+                showError();
+            }
+        }
+
+        function updatePaymentStatus(status) {
+            const statusIndicator = document.getElementById('paymentStatusIndicator');
+            const statusText = document.getElementById('paymentStatusText');
+            
+            if (status === 'รอตรวจสอบ') {
+                statusIndicator.className = 'w-4 h-4 bg-orange-500 rounded-full';
+                statusText.className = 'text-lg font-semibold text-orange-600';
+                statusText.textContent = 'รอตรวจสอบ';
+            } else if (status === 'ชำระเงินแล้ว') {
+                statusIndicator.className = 'w-4 h-4 bg-green-500 rounded-full';
+                statusText.className = 'text-lg font-semibold text-green-600';
+                statusText.textContent = 'ชำระเงินแล้ว';
+            } else {
+                // Default status
+                statusIndicator.className = 'w-4 h-4 bg-gray-500 rounded-full';
+                statusText.className = 'text-lg font-semibold text-gray-600';
+                statusText.textContent = status || 'ไม่ระบุสถานะ';
+            }
+        }
+
+        function displayStudentData(data) {
+            // Populate data fields
+            document.getElementById('displayStudentId').textContent = data.studentId || '-';
+            document.getElementById('displayStudentName').textContent = data.studentName || '-';
+            document.getElementById('displayStudentGrade').textContent = data.studentGrade || '-';
+            document.getElementById('displayStudentPhone').textContent = data.studentPhone || '-';
+            document.getElementById('displayStudentEmail').textContent = data.studentEmail || '-';
+            document.getElementById('displaySchool').textContent = data.school || '-';
+            document.getElementById('displayProvince').textContent = data.province || '-';
+            document.getElementById('displayDistrict').textContent = data.district || '-';
+            
+            document.getElementById('displayParentName').textContent = data.parentName || '-';
+            document.getElementById('displayParentPhone').textContent = data.parentPhone || '-';
+            document.getElementById('displayParentEmail').textContent = data.parentEmail || '-';
+            
+            // Update payment status display
+            updatePaymentStatus(data.paymentStatus);
+
+            // Show results
+            document.getElementById('searchResults').classList.remove('hidden');
+            
+            // Scroll to results
+            document.getElementById('searchResults').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showNoResults() {
+            document.getElementById('noResults').classList.remove('hidden');
+            document.getElementById('noResults').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showError() {
+            document.getElementById('errorMessage').classList.remove('hidden');
+            document.getElementById('errorMessage').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hideAllResults() {
+            document.getElementById('searchResults').classList.add('hidden');
+            document.getElementById('noResults').classList.add('hidden');
+            document.getElementById('errorMessage').classList.add('hidden');
+        }
+
+        function searchAnother() {
+            // Reset form
+            document.getElementById('searchForm').reset();
+            hideAllResults();
+            
+            // Focus on search input
+            document.getElementById('searchId').focus();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function printData() {
+            window.print();
+        }
+
+        /*
+        การเชื่อมต่อกับ Google Sheets:
+        
+        ระบบนี้จะเชื่อมต่อกับ Google Sheets โดยตรงโดยใช้ CSV Export URL
+        
+        วิธีตั้งค่า Google Sheets ให้เป็น Public:
+        1. เปิด Google Sheets
+        2. คลิก "Share" มุมขวาบน
+        3. คลิก "Change to anyone with the link"
+        4. เลือก "Viewer" 
+        5. คลิก "Done"
+        
+        โครงสร้างคอลัมน์ใน Google Sheets ต้องมีหัวข้อดังนี้:
+        - เลขบัตรประชาชน (ใช้สำหรับค้นหา)
+        - ชื่อนักเรียน
+        - ระดับชั้น
+        - เบอร์โทรนักเรียน
+        - อีเมลนักเรียน
+        - โรงเรียน
+        - จังหวัด
+        - อำเภอ
+        - ชื่อผู้ปกครอง
+        - เบอร์โทรผู้ปกครอง
+        - อีเมลผู้ปกครอง
+        - สถานะ (ค่าที่ใช้: "ชำระเงินแล้ว" หรือ "รอตรวจสอบ")
+        
+        หมายเหตุ: 
+        - ระบบจะค้นหาข้อมูลโดยใช้เลขบัตรประชาชนเป็นหลัก
+        - Google Sheets ต้องมีข้อมูลในแถวแรกเป็นหัวข้อคอลัมน์
+        - ข้อมูลนักเรียนเริ่มจากแถวที่ 2 เป็นต้นไป
+        - ระบบจะอัปเดตข้อมูลแบบเรียลไทม์จาก Google Sheets
+        */
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9850df6410927323',t:'MTc1ODg2OTkwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
