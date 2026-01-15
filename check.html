@@ -80,9 +80,9 @@
                         <span class="text-gray-400 text-lg">จากผู้เข้าสอบทั้งหมด <span id="displayTotalStudents" class="font-bold text-gray-600">-</span> คน</span>
                     </div>
                 </div>
-                <div class="hidden md:block">
-                    <div class="w-20 h-20 bg-yellow-50 rounded-full flex items-center justify-center shadow-inner">
-                        <span class="text-4xl">🏆</span>
+                <div id="trophyContainer" class="hidden md:block opacity-0 transition-opacity duration-1000">
+                    <div id="trophyBg" class="w-24 h-24 rounded-full flex items-center justify-center shadow-inner">
+                        <span id="trophyEmoji" class="text-5xl">🏆</span>
                     </div>
                 </div>
             </div>
@@ -227,12 +227,20 @@
         function displayResult(studentRow, header, allRows) {
             const getData = (row, name) => row[header.indexOf(name)] || '0';
             
+            // 1. แสดงชื่อ
             document.getElementById('displayStudentName').textContent = getData(studentRow, COL_NAME);
-            document.getElementById('displayRank').textContent = getData(studentRow, COL_RANK);
+            
+            // 2. ลำดับที่
+            const rankValue = getData(studentRow, COL_RANK);
+            document.getElementById('displayRank').textContent = rankValue;
+            
+            // 3. ควบคุมการแสดงถ้วยรางวัล
+            updateTrophy(parseInt(rankValue));
+
             const totalStudents = allRows.filter(r => r[header.indexOf(COL_ID)] && r !== header).length;
             document.getElementById('displayTotalStudents').textContent = totalStudents;
 
-            // การตั้งค่าวิชา: id, key ใน sheet, คะแนนเต็ม
+            // 4. คะแนนรายวิชา
             const config = [
                 { id: 'Math', key: COL_MATH, max: 30 },
                 { id: 'Sci',  key: COL_SCI,  max: 30 },
@@ -243,16 +251,12 @@
             config.forEach(item => {
                 const score = parseFloat(getData(studentRow, item.key)) || 0;
                 const percent = Math.round((score / item.max) * 100);
-                
-                // แสดงตัวเลขคะแนนและเปอร์เซ็นต์
                 document.getElementById(`score${item.id}`).textContent = score;
                 document.getElementById(`percent${item.id}`).textContent = `${percent}%`;
                 
-                // คำนวณเส้นรอบวงวงกลม (2 * PI * R) โดย R=45 -> 2 * 3.14 * 45 ≈ 283
                 const circumference = 283;
                 const offset = circumference - (percent / 100) * circumference;
                 
-                // ใส่ Animation
                 setTimeout(() => {
                     const circle = document.getElementById(`circle${item.id}`);
                     circle.style.strokeDasharray = circumference;
@@ -265,9 +269,37 @@
             document.getElementById('searchResults').scrollIntoView({ behavior: 'smooth' });
         }
 
+        // ฟังก์ชันใหม่สำหรับจัดการถ้วยรางวัล
+        function updateTrophy(rank) {
+            const container = document.getElementById('trophyContainer');
+            const emoji = document.getElementById('trophyEmoji');
+            const bg = document.getElementById('trophyBg');
+
+            container.classList.add('opacity-0'); // Reset animation
+
+            if (rank >= 1 && rank <= 3) {
+                container.classList.remove('hidden');
+                setTimeout(() => container.classList.remove('opacity-0'), 100);
+                
+                if (rank === 1) {
+                    emoji.textContent = '🏆'; // ทอง
+                    bg.className = 'w-24 h-24 rounded-full flex items-center justify-center shadow-inner bg-yellow-100 border-2 border-yellow-400';
+                } else if (rank === 2) {
+                    emoji.textContent = '🥈'; // เงิน
+                    bg.className = 'w-24 h-24 rounded-full flex items-center justify-center shadow-inner bg-slate-100 border-2 border-slate-300';
+                } else if (rank === 3) {
+                    emoji.textContent = '🥉'; // ทองแดง
+                    bg.className = 'w-24 h-24 rounded-full flex items-center justify-center shadow-inner bg-orange-50 border-2 border-orange-300';
+                }
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
         function hideAll() {
             document.getElementById('searchResults').classList.add('hidden');
             document.getElementById('noResults').classList.add('hidden');
+            document.getElementById('trophyContainer').classList.add('hidden');
         }
 
         function searchAnother() {
