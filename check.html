@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ผลคะแนนสอบ - โครงการเพชรสามร้อยยอด</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; }
+        .grade-card { transition: all 0.3s ease; }
+        .grade-card:hover { transform: translateY(-5px); }
+        @media print { .no-print { display: none; } }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+    <header class="bg-indigo-900 text-white shadow-xl no-print">
+        <div class="max-w-5xl mx-auto px-6 py-10">
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
+                <div class="flex-shrink-0">
+                    <img src="https://via.placeholder.com/100" alt="ตราโรงเรียน" 
+                         id="schoolLogo"
+                         class="w-20 h-20 md:w-24 md:h-24 object-contain rounded-full bg-white p-1 shadow-inner">
+                </div>
+                <div class="text-center md:text-left">
+                    <h1 class="text-3xl md:text-4xl font-extrabold mb-1">โครงการเพชรสามร้อยยอด</h1>
+                    <p class="text-indigo-200 text-base md:text-lg">ประกาศผลคะแนนการแข่งขันทดสอบความรู้ทางวิชาการ</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 -mt-8 pb-12">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-10 mb-8 no-print border-t-4 border-indigo-500">
+            <div class="max-w-md mx-auto">
+                <label class="block text-gray-700 text-lg font-semibold mb-4 text-center">กรอกเลขบัตรประจำตัวประชาชนเพื่อดูผลคะแนน</label>
+                <form id="searchForm" class="relative">
+                    <input type="text" id="searchId" maxlength="13" required
+                        class="w-full pl-5 pr-12 py-4 bg-gray-100 border-none rounded-2xl text-xl focus:ring-4 focus:ring-indigo-500/20 transition-all text-center tracking-widest"
+                        placeholder="เลขบัตรประชาชน 13 หลัก">
+                    <button type="submit" id="searchBtn" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center space-x-2">
+                        <span id="searchText">ตรวจสอบคะแนน</span>
+                        <div id="loadingIcon" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div id="searchResults" class="hidden space-y-8 animate-in fade-in duration-500">
+            
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
+                <div class="bg-indigo-50 px-8 py-4 border-b border-indigo-100 flex justify-between items-center">
+                    <h3 class="text-indigo-900 font-bold text-xl">ข้อมูลผู้เข้าสอบ</h3>
+                    <span class="bg-green-500 text-white text-xs px-3 py-1 rounded-full uppercase tracking-wider">Verified</span>
+                </div>
+                <div class="p-8 text-center md:text-left border-l-8 border-indigo-600">
+                    <p class="text-sm text-gray-500 mb-1">ชื่อ-นามสกุล</p>
+                    <p id="displayStudentName" class="text-3xl font-bold text-gray-800">-</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-md border-l-8 border-yellow-500 p-6 flex items-center justify-between">
+                <div>
+                    <h4 class="text-gray-500 font-medium text-sm uppercase tracking-wide">ลำดับที่สอบได้</h4>
+                    <div class="flex items-baseline space-x-2">
+                        <span class="text-gray-400 text-lg font-medium">ลำดับที่</span>
+                        <span id="displayRank" class="text-6xl font-black text-indigo-900">-</span>
+                        <span class="text-gray-400 text-lg">จากผู้เข้าสอบทั้งหมด <span id="displayTotalStudents" class="font-bold text-gray-600">-</span> คน</span>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="w-20 h-20 bg-yellow-50 rounded-full flex items-center justify-center shadow-inner">
+                        <span class="text-4xl">🏆</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="grade-card bg-white p-6 rounded-2xl shadow-md border-t-4 border-blue-500">
+                    <p class="text-gray-500 font-medium mb-1 text-sm">คณิตศาสตร์</p>
+                    <div class="flex items-baseline space-x-1">
+                        <span id="scoreMath" class="text-4xl font-black text-blue-600">0</span>
+                        <span class="text-gray-400">/ 30</span>
+                    </div>
+                    <div class="w-full bg-gray-100 h-2 rounded-full mt-4">
+                        <div id="barMath" class="bg-blue-500 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="grade-card bg-white p-6 rounded-2xl shadow-md border-t-4 border-emerald-500">
+                    <p class="text-gray-500 font-medium mb-1 text-sm">วิทยาศาสตร์</p>
+                    <div class="flex items-baseline space-x-1">
+                        <span id="scoreSci" class="text-4xl font-black text-emerald-600">0</span>
+                        <span class="text-gray-400">/ 30</span>
+                    </div>
+                    <div class="w-full bg-gray-100 h-2 rounded-full mt-4">
+                        <div id="barSci" class="bg-emerald-500 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="grade-card bg-white p-6 rounded-2xl shadow-md border-t-4 border-orange-500">
+                    <p class="text-gray-500 font-medium mb-1 text-sm">ภาษาไทย</p>
+                    <div class="flex items-baseline space-x-1">
+                        <span id="scoreThai" class="text-4xl font-black text-orange-600">0</span>
+                        <span class="text-gray-400">/ 20</span>
+                    </div>
+                    <div class="w-full bg-gray-100 h-2 rounded-full mt-4">
+                        <div id="barThai" class="bg-orange-500 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="grade-card bg-white p-6 rounded-2xl shadow-md border-t-4 border-purple-500">
+                    <p class="text-gray-500 font-medium mb-1 text-sm">ภาษาอังกฤษ</p>
+                    <div class="flex items-baseline space-x-1">
+                        <span id="scoreEng" class="text-4xl font-black text-purple-600">0</span>
+                        <span class="text-gray-400">/ 20</span>
+                    </div>
+                    <div class="w-full bg-gray-100 h-2 rounded-full mt-4">
+                        <div id="barEng" class="bg-purple-500 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white flex flex-col md:flex-row justify-between items-center shadow-lg">
+                <div class="mb-4 md:mb-0 text-center md:text-left">
+                    <h4 class="text-2xl font-bold">คะแนนรวมทั้งหมด</h4>
+                    <p class="text-indigo-100">ดึงข้อมูลคะแนนสรุปจากระบบกลาง</p>
+                </div>
+                <div class="text-center md:text-right">
+                    <span id="scoreTotal" class="text-6xl font-black">0</span>
+                    <span class="text-2xl font-light opacity-80">/ 100</span>
+                </div>
+            </div>
+
+            <div class="flex justify-center no-print">
+                <button onclick="searchAnother()" class="bg-white border-2 border-gray-200 text-gray-600 px-12 py-3 rounded-xl font-bold hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm">
+                    ค้นหาใหม่
+                </button>
+            </div>
+        </div>
+
+        <div id="noResults" class="hidden bg-white rounded-2xl shadow-xl p-12 text-center mt-8 border-t-4 border-red-500">
+            <div class="text-red-500 text-6xl mb-4">⚠️</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">ไม่พบข้อมูลคะแนน</h3>
+            <p class="text-gray-500 mb-6">กรุณาตรวจสอบเลขบัตรประชาชนใหม่อีกครั้ง</p>
+            <button onclick="searchAnother()" class="text-indigo-600 font-bold hover:underline">ลองใหม่อีกครั้ง</button>
+        </div>
+    </main>
+
+    <script>
+        // ข้อมูล Spreadsheet
+        const SHEET_ID = '1A8iqQJbo8vMp8ckH1YZyxs7bDhiEdZ1jA7-MdqYDIB0'; // เปลี่ยนเป็น ID ของคุณ
+        
+        // กำหนดชื่อคอลัมน์ให้ตรงกับ Header ใน Google Sheets
+        const COL_ID = 'เลขบัตรประชาชน';
+        const COL_NAME = 'ชื่อนักเรียน';
+        const COL_MATH = 'คะแนนคณิตศาสตร์';
+        const COL_SCI = 'คะแนนวิทยาศาสตร์';
+        const COL_THAI = 'คะแนนภาษาไทย';
+        const COL_ENG = 'คะแนนภาษาอังกฤษ';
+        const COL_TOTAL = 'คะแนนรวม';
+        const COL_RANK = 'ลำดับที่';
+
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('searchBtn');
+            const loader = document.getElementById('loadingIcon');
+            const text = document.getElementById('searchText');
+            const idInput = document.getElementById('searchId').value.trim();
+
+            btn.disabled = true;
+            loader.classList.remove('hidden');
+            text.textContent = 'กำลังประมวลผล...';
+            hideAll();
+
+            try {
+                // gid=0 หมายถึง Sheet แผ่นแรก
+                const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+                const response = await fetch(csvUrl);
+                const csvText = await response.text();
+                const rows = parseCSV(csvText);
+                
+                const header = rows[0];
+                const studentRow = rows.find(r => r[header.indexOf(COL_ID)] === idInput);
+
+                if (studentRow) {
+                    displayResult(studentRow, header, rows);
+                } else {
+                    document.getElementById('noResults').classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล กรุณาตรวจสอบการแชร์ลิงก์ Google Sheets');
+            } finally {
+                btn.disabled = false;
+                loader.classList.add('hidden');
+                text.textContent = 'ตรวจสอบคะแนน';
+            }
+        });
+
+        function displayResult(studentRow, header, allRows) {
+            const getData = (row, name) => row[header.indexOf(name)] || '0';
+            
+            // 1. แสดงชื่อ
+            document.getElementById('displayStudentName').textContent = getData(studentRow, COL_NAME);
+
+            // 2. แสดงลำดับที่ (ดึงจากคอลัมน์ใน Sheet)
+            document.getElementById('displayRank').textContent = getData(studentRow, COL_RANK);
+            
+            // 3. แสดงจำนวนนักเรียนทั้งหมด (นับแถวที่มีข้อมูลยกเว้น Header)
+            const totalStudents = allRows.filter(r => r[header.indexOf(COL_ID)] && r !== header).length;
+            document.getElementById('displayTotalStudents').textContent = totalStudents;
+
+            // 4. แสดงคะแนนรายวิชาและ Progress Bar
+            const config = [
+                { id: 'Math', key: COL_MATH, max: 30 },
+                { id: 'Sci',  key: COL_SCI,  max: 30 },
+                { id: 'Thai', key: COL_THAI, max: 20 },
+                { id: 'Eng',  key: COL_ENG,  max: 20 }
+            ];
+
+            config.forEach(item => {
+                const score = parseInt(getData(studentRow, item.key)) || 0;
+                document.getElementById(`score${item.id}`).textContent = score;
+                const percent = (score / item.max) * 100;
+                setTimeout(() => {
+                    document.getElementById(`bar${item.id}`).style.width = `${percent}%`;
+                }, 150);
+            });
+            
+            // 5. แสดงคะแนนรวม (ดึงจากคอลัมน์ใน Sheet)
+            document.getElementById('scoreTotal').textContent = getData(studentRow, COL_TOTAL);
+            
+            document.getElementById('searchResults').classList.remove('hidden');
+            document.getElementById('searchResults').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hideAll() {
+            document.getElementById('searchResults').classList.add('hidden');
+            document.getElementById('noResults').classList.add('hidden');
+        }
+
+        function searchAnother() {
+            document.getElementById('searchId').value = '';
+            hideAll();
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function parseCSV(text) {
+            return text.split(/\r?\n/).map(line => {
+                const row = [];
+                let curr = '', inQ = false;
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    if (char === '"') inQ = !inQ;
+                    else if (char === ',' && !inQ) { row.push(curr.trim()); curr = ''; }
+                    else curr += char;
+                }
+                row.push(curr.trim());
+                return row;
+            });
+        }
+    </script>
+</body>
+</html>
