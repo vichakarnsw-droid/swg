@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ประกาศ - โครงการเพชรสามร้อยยอด</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Sarabun', sans-serif; 
+            background: radial-gradient(circle at top right, #eef2ff, #f8fafc);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .pulse-glow {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header class="bg-indigo-900 text-white shadow-xl">
+        <div class="max-w-5xl mx-auto px-6 py-6 md:py-8">
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+                <div class="flex-shrink-0">
+                    <img src="school.logo.png" alt="ตราโรงเรียน" 
+                         class="w-16 h-16 md:w-20 md:h-20 object-contain rounded-full bg-white p-1 shadow-inner">
+                </div>
+                <div class="text-center md:text-left">
+                    <h1 class="text-2xl md:text-3xl font-extrabold mb-0.5">โครงการเพชรสามร้อยยอด</h1>
+                    <p class="text-indigo-200 text-sm md:text-base tracking-wide">การแข่งขันทดสอบความรู้ทางวิชาการ</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+        <div class="max-w-2xl w-full">
+            <div class="glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border-t-8 border-indigo-600 relative">
+                
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-indigo-100 rounded-full blur-3xl opacity-50"></div>
+                <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-100 rounded-full blur-3xl opacity-50"></div>
+
+                <div class="p-8 md:p-12 text-center relative z-10">
+                    <div class="mb-8 inline-block relative">
+                        <div class="w-32 h-32 bg-indigo-50 rounded-full flex items-center justify-center animate-float shadow-inner">
+                            <span class="text-6xl">🔒</span>
+                        </div>
+                        <div class="absolute bottom-0 right-0 w-8 h-8 bg-amber-400 rounded-full border-4 border-white pulse-glow shadow-sm"></div>
+                    </div>
+
+                    <h2 class="text-3xl md:text-4xl font-black text-gray-800 mb-4">
+                        ระบบยังไม่เปิดให้บริการ
+                    </h2>
+                    
+                    <div class="w-20 h-1.5 bg-indigo-600 mx-auto mb-6 rounded-full"></div>
+
+                    <p class="text-gray-600 text-lg md:text-xl leading-relaxed mb-8">
+                        ขออภัยในความไม่สะดวก <br class="hidden md:block"> 
+                        ขณะนี้ระบบประกาศผลคะแนนสอบ <br class="md:hidden"> 
+                        <span class="font-bold text-indigo-700 italic">"โครงการเพชรสามร้อยยอด"</span> <br>
+                        อยู่ระหว่างการเตรียมความพร้อมของข้อมูล
+                    </p>
+
+                    <div class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 inline-block w-full">
+                        <div class="flex items-center justify-center gap-3 text-indigo-800 font-semibold mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                            กำหนดการประกาศผล
+                        </div>
+                        <p class="text-gray-500">
+                            โปรดติดตามการแจ้งเตือนจากทางโรงเรียน <br> 
+                            หรือเข้าตรวจสอบอีกครั้งในภายหลัง
+                        </p>
+                    </div>
+
+                    <div class="mt-10">
+                        <a href="https://vichakarn.samroiwit.ac.th/เพชรสามรอยยอด" 
+                           class="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-2xl font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-indigo-200 flex items-center gap-2 mx-auto w-fit">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                            กลับสู่หน้าหลัก
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-center text-gray-400 text-sm mt-8">
+                &copy; 2024 โครงการเพชรสามร้อยยอด. All rights reserved.
+            </p>
+        </div>
+    </main>
+
+</body>
+</html>
