@@ -11,6 +11,17 @@
         .grade-card { transition: all 0.3s ease; }
         .grade-card:hover { transform: translateY(-5px); }
         @media print { .no-print { display: none; } }
+        
+        /* สไตล์สำหรับวงกลม Progress */
+        .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; }
+        .circle-progress { 
+            fill: none; 
+            stroke-width: 8; 
+            stroke-linecap: round; 
+            transition: stroke-dasharray 1.5s ease-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen">
@@ -77,55 +88,71 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="grade-card bg-white p-6 rounded-2xl shadow-md border-t-4 border-blue-500">
-                    <p class="text-gray-500 font-medium mb-1 text-sm">คณิตศาสตร์</p>
-                    <div class="flex items-baseline space-x-1">
-                        <span id="scoreMath" class="text-4xl font-black text-blue-600">0</span>
-                        <span class="text-gray-400">/ 30</span>
+                <div class="grade-card bg-white p-6 rounded-3xl shadow-md border border-gray-100 flex flex-col items-center">
+                    <p class="text-gray-500 font-bold mb-4">คณิตศาสตร์</p>
+                    <div class="relative w-32 h-32 mb-4">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                            <circle id="circleMath" class="circle-progress stroke-blue-500" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="scoreMath" class="text-2xl font-black text-blue-600">0</span>
+                            <span class="text-[10px] text-gray-400">เต็ม 30</span>
+                        </div>
                     </div>
-                    <div class="w-full bg-gray-100 h-2 rounded-full mt-4">
-                        <div id="barMath" class="bg-blue-500 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
-                    </div>
+                    <span id="percentMath" class="bg-blue-50 text-blue-600 text-xs font-bold px-3 py-1 rounded-full">0%</span>
                 </div>
 
-                <div class="grade-card bg-white p-6 rounded-2xl shadow-md border-t-4 border-emerald-500">
-                    <p class="text-gray-500 font-medium mb-1 text-sm">วิทยาศาสตร์</p>
-                    <div class="flex items-baseline space-x-1">
-                        <span id="scoreSci" class="text-4xl font-black text-emerald-600">0</span>
-                        <span class="text-gray-400">/ 30</span>
+                <div class="grade-card bg-white p-6 rounded-3xl shadow-md border border-gray-100 flex flex-col items-center">
+                    <p class="text-gray-500 font-bold mb-4">วิทยาศาสตร์</p>
+                    <div class="relative w-32 h-32 mb-4">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                            <circle id="circleSci" class="circle-progress stroke-emerald-500" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="scoreSci" class="text-2xl font-black text-emerald-600">0</span>
+                            <span class="text-[10px] text-gray-400">เต็ม 30</span>
+                        </div>
                     </div>
-                    <div class="w-full bg-gray-100 h-2 rounded-full mt-4">
-                        <div id="barSci" class="bg-emerald-500 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
-                    </div>
+                    <span id="percentSci" class="bg-emerald-50 text-emerald-600 text-xs font-bold px-3 py-1 rounded-full">0%</span>
                 </div>
 
-                <div class="grade-card bg-white p-6 rounded-2xl shadow-md border-t-4 border-orange-500">
-                    <p class="text-gray-500 font-medium mb-1 text-sm">ภาษาไทย</p>
-                    <div class="flex items-baseline space-x-1">
-                        <span id="scoreThai" class="text-4xl font-black text-orange-600">0</span>
-                        <span class="text-gray-400">/ 20</span>
+                <div class="grade-card bg-white p-6 rounded-3xl shadow-md border border-gray-100 flex flex-col items-center">
+                    <p class="text-gray-500 font-bold mb-4">ภาษาไทย</p>
+                    <div class="relative w-32 h-32 mb-4">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                            <circle id="circleThai" class="circle-progress stroke-orange-500" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="scoreThai" class="text-2xl font-black text-orange-600">0</span>
+                            <span class="text-[10px] text-gray-400">เต็ม 20</span>
+                        </div>
                     </div>
-                    <div class="w-full bg-gray-100 h-2 rounded-full mt-4">
-                        <div id="barThai" class="bg-orange-500 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
-                    </div>
+                    <span id="percentThai" class="bg-orange-50 text-orange-600 text-xs font-bold px-3 py-1 rounded-full">0%</span>
                 </div>
 
-                <div class="grade-card bg-white p-6 rounded-2xl shadow-md border-t-4 border-purple-500">
-                    <p class="text-gray-500 font-medium mb-1 text-sm">ภาษาอังกฤษ</p>
-                    <div class="flex items-baseline space-x-1">
-                        <span id="scoreEng" class="text-4xl font-black text-purple-600">0</span>
-                        <span class="text-gray-400">/ 20</span>
+                <div class="grade-card bg-white p-6 rounded-3xl shadow-md border border-gray-100 flex flex-col items-center">
+                    <p class="text-gray-500 font-bold mb-4">ภาษาอังกฤษ</p>
+                    <div class="relative w-32 h-32 mb-4">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                            <circle id="circleEng" class="circle-progress stroke-purple-500" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="scoreEng" class="text-2xl font-black text-purple-600">0</span>
+                            <span class="text-[10px] text-gray-400">เต็ม 20</span>
+                        </div>
                     </div>
-                    <div class="w-full bg-gray-100 h-2 rounded-full mt-4">
-                        <div id="barEng" class="bg-purple-500 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
-                    </div>
+                    <span id="percentEng" class="bg-purple-50 text-purple-600 text-xs font-bold px-3 py-1 rounded-full">0%</span>
                 </div>
             </div>
 
             <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white flex flex-col md:flex-row justify-between items-center shadow-lg">
                 <div class="mb-4 md:mb-0 text-center md:text-left">
                     <h4 class="text-2xl font-bold">คะแนนรวมทั้งหมด</h4>
-                    <p class="text-indigo-100">ดึงข้อมูลคะแนนสรุปจากระบบกลาง</p>
+                    <p class="text-indigo-100">ระบบประมวลผลคะแนนสุทธิ</p>
                 </div>
                 <div class="text-center md:text-right">
                     <span id="scoreTotal" class="text-6xl font-black">0</span>
@@ -150,9 +177,8 @@
 
     <script>
         // ข้อมูล Spreadsheet
-        const SHEET_ID = '1V0oAKxG6Mp-20StukOwo0s7wLHa9PMbJVL-xUynIgrY'; // เปลี่ยนเป็น ID ของคุณ
+        const SHEET_ID = '1V0oAKxG6Mp-20StukOwo0s7wLHa9PMbJVL-xUynIgrY'; 
         
-        // กำหนดชื่อคอลัมน์ให้ตรงกับ Header ใน Google Sheets
         const COL_ID = 'เลขบัตรประชาชน';
         const COL_NAME = 'ชื่อนักเรียน';
         const COL_MATH = 'คะแนนคณิตศาสตร์';
@@ -175,7 +201,6 @@
             hideAll();
 
             try {
-                // gid=0 หมายถึง Sheet แผ่นแรก
                 const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
                 const response = await fetch(csvUrl);
                 const csvText = await response.text();
@@ -191,7 +216,7 @@
                 }
             } catch (err) {
                 console.error(err);
-                alert('เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล กรุณาตรวจสอบการแชร์ลิงก์ Google Sheets');
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล');
             } finally {
                 btn.disabled = false;
                 loader.classList.add('hidden');
@@ -202,17 +227,12 @@
         function displayResult(studentRow, header, allRows) {
             const getData = (row, name) => row[header.indexOf(name)] || '0';
             
-            // 1. แสดงชื่อ
             document.getElementById('displayStudentName').textContent = getData(studentRow, COL_NAME);
-
-            // 2. แสดงลำดับที่ (ดึงจากคอลัมน์ใน Sheet)
             document.getElementById('displayRank').textContent = getData(studentRow, COL_RANK);
-            
-            // 3. แสดงจำนวนนักเรียนทั้งหมด (นับแถวที่มีข้อมูลยกเว้น Header)
             const totalStudents = allRows.filter(r => r[header.indexOf(COL_ID)] && r !== header).length;
             document.getElementById('displayTotalStudents').textContent = totalStudents;
 
-            // 4. แสดงคะแนนรายวิชาและ Progress Bar
+            // การตั้งค่าวิชา: id, key ใน sheet, คะแนนเต็ม
             const config = [
                 { id: 'Math', key: COL_MATH, max: 30 },
                 { id: 'Sci',  key: COL_SCI,  max: 30 },
@@ -221,17 +241,26 @@
             ];
 
             config.forEach(item => {
-                const score = parseInt(getData(studentRow, item.key)) || 0;
+                const score = parseFloat(getData(studentRow, item.key)) || 0;
+                const percent = Math.round((score / item.max) * 100);
+                
+                // แสดงตัวเลขคะแนนและเปอร์เซ็นต์
                 document.getElementById(`score${item.id}`).textContent = score;
-                const percent = (score / item.max) * 100;
+                document.getElementById(`percent${item.id}`).textContent = `${percent}%`;
+                
+                // คำนวณเส้นรอบวงวงกลม (2 * PI * R) โดย R=45 -> 2 * 3.14 * 45 ≈ 283
+                const circumference = 283;
+                const offset = circumference - (percent / 100) * circumference;
+                
+                // ใส่ Animation
                 setTimeout(() => {
-                    document.getElementById(`bar${item.id}`).style.width = `${percent}%`;
-                }, 150);
+                    const circle = document.getElementById(`circle${item.id}`);
+                    circle.style.strokeDasharray = circumference;
+                    circle.style.strokeDashoffset = offset;
+                }, 100);
             });
             
-            // 5. แสดงคะแนนรวม (ดึงจากคอลัมน์ใน Sheet)
             document.getElementById('scoreTotal').textContent = getData(studentRow, COL_TOTAL);
-            
             document.getElementById('searchResults').classList.remove('hidden');
             document.getElementById('searchResults').scrollIntoView({ behavior: 'smooth' });
         }
