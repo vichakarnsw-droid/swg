@@ -12,7 +12,6 @@
         .grade-card:hover { transform: translateY(-5px); }
         @media print { .no-print { display: none; } }
         
-        /* สไตล์สำหรับวงกลม Progress */
         .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; }
         .circle-progress { 
             fill: none; 
@@ -59,7 +58,6 @@
         </div>
 
         <div id="searchResults" class="hidden space-y-8 animate-in fade-in duration-500">
-            
             <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
                 <div class="bg-indigo-50 px-8 py-4 border-b border-indigo-100 flex justify-between items-center">
                     <h3 class="text-indigo-900 font-bold text-xl">ข้อมูลผู้เข้าสอบ</h3>
@@ -88,82 +86,82 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="grade-card bg-white p-6 rounded-3xl shadow-md border border-gray-100 flex flex-col items-center">
-                    <p class="text-gray-500 font-bold mb-4">คณิตศาสตร์</p>
-                    <div class="relative w-32 h-32 mb-4">
-                        <svg class="w-full h-full" viewBox="0 0 100 100">
-                            <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
-                            <circle id="circleMath" class="circle-progress stroke-blue-500" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283"></circle>
-                        </svg>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <span id="scoreMath" class="text-2xl font-black text-blue-600">0</span>
-                            <span class="text-[10px] text-gray-400">เต็ม 30</span>
-                        </div>
-                    </div>
-                    <span id="percentMath" class="bg-blue-50 text-blue-600 text-xs font-bold px-3 py-1 rounded-full">0%</span>
-                </div>
+                <script>
+                    const subjects = [
+                        { id: 'Math', name: 'คณิตศาสตร์', color: 'blue', max: 30 },
+                        { id: 'Sci', name: 'วิทยาศาสตร์', color: 'emerald', max: 30 },
+                        { id: 'Thai', name: 'ภาษาไทย', color: 'orange', max: 20 },
+                        { id: 'Eng', name: 'ภาษาอังกฤษ', color: 'purple', max: 20 }
+                    ];
+                    
+                    subjects.forEach(s => {
+                        document.write(`
+                            <div class="grade-card bg-white p-6 rounded-3xl shadow-md border border-gray-100 flex flex-col items-center">
+                                <p class="text-gray-500 font-bold mb-4">${s.name}</p>
+                                <div class="relative w-32 h-32 mb-4">
+                                    <svg class="w-full h-full" viewBox="0 0 100 100">
+                                        <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                                        <circle id="circle${s.id}" class="circle-progress stroke-${s.color}-500" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283"></circle>
+                                    </svg>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span id="score${s.id}" class="text-3xl font-black text-${s.color}-600">0</span>
+                                        <span class="text-[10px] text-gray-400">เต็ม ${s.max}</span>
+                                    </div>
+                                </div>
+                                <span id="percent${s.id}" class="bg-${s.color}-50 text-${s.color}-600 text-xs font-bold px-3 py-1 rounded-full mb-4">0%</span>
+                                
+                                <div class="w-full pt-3 border-t border-gray-100 grid grid-cols-3 gap-1 text-xs text-center">
+                                    <div><p class="text-red-500 font-semibold mb-0.5">สูงสุด</p><p id="max${s.id}" class="font-bold text-gray-700">-</p></div>
+                                    <div><p class="text-slate-400 font-semibold mb-0.5">ต่ำสุด</p><p id="min${s.id}" class="font-bold text-gray-700">-</p></div>
+                                    <div><p class="text-blue-500 font-semibold mb-0.5">เฉลี่ย</p><p id="avg${s.id}" class="font-bold text-gray-700">-</p></div>
+                                </div>
+                            </div>
+                        `);
+                    });
+                </script>
+            </div>
 
-                <div class="grade-card bg-white p-6 rounded-3xl shadow-md border border-gray-100 flex flex-col items-center">
-                    <p class="text-gray-500 font-bold mb-4">วิทยาศาสตร์</p>
-                    <div class="relative w-32 h-32 mb-4">
-                        <svg class="w-full h-full" viewBox="0 0 100 100">
-                            <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
-                            <circle id="circleSci" class="circle-progress stroke-emerald-500" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283"></circle>
-                        </svg>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <span id="scoreSci" class="text-2xl font-black text-emerald-600">0</span>
-                            <span class="text-[10px] text-gray-400">เต็ม 30</span>
-                        </div>
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white shadow-lg">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                    <div class="mb-4 md:mb-0 text-center md:text-left">
+                        <h4 class="text-2xl font-bold">คะแนนรวมทั้งหมด</h4>
+                        <p class="text-indigo-100">ระบบประมวลผลคะแนนสุทธิ</p>
                     </div>
-                    <span id="percentSci" class="bg-emerald-50 text-emerald-600 text-xs font-bold px-3 py-1 rounded-full">0%</span>
+                    <div class="text-center md:text-right">
+                        <span id="scoreTotal" class="text-6xl font-black">0</span>
+                        <span class="text-2xl font-light opacity-80">/ 100</span>
+                    </div>
                 </div>
-
-                <div class="grade-card bg-white p-6 rounded-3xl shadow-md border border-gray-100 flex flex-col items-center">
-                    <p class="text-gray-500 font-bold mb-4">ภาษาไทย</p>
-                    <div class="relative w-32 h-32 mb-4">
-                        <svg class="w-full h-full" viewBox="0 0 100 100">
-                            <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
-                            <circle id="circleThai" class="circle-progress stroke-orange-500" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283"></circle>
-                        </svg>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <span id="scoreThai" class="text-2xl font-black text-orange-600">0</span>
-                            <span class="text-[10px] text-gray-400">เต็ม 20</span>
-                        </div>
+                
+                <div class="grid grid-cols-3 gap-4 py-4 border-t border-white/20 text-center">
+                    <div>
+                        <p class="text-xs text-indigo-200 uppercase tracking-wider mb-1 font-bold">สูงสุดในรุ่น</p>
+                        <p id="maxTotal" class="text-xl font-bold">0</p>
                     </div>
-                    <span id="percentThai" class="bg-orange-50 text-orange-600 text-xs font-bold px-3 py-1 rounded-full">0%</span>
-                </div>
-
-                <div class="grade-card bg-white p-6 rounded-3xl shadow-md border border-gray-100 flex flex-col items-center">
-                    <p class="text-gray-500 font-bold mb-4">ภาษาอังกฤษ</p>
-                    <div class="relative w-32 h-32 mb-4">
-                        <svg class="w-full h-full" viewBox="0 0 100 100">
-                            <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
-                            <circle id="circleEng" class="circle-progress stroke-purple-500" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283"></circle>
-                        </svg>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <span id="scoreEng" class="text-2xl font-black text-purple-600">0</span>
-                            <span class="text-[10px] text-gray-400">เต็ม 20</span>
-                        </div>
+                    <div>
+                        <p class="text-xs text-indigo-200 uppercase tracking-wider mb-1 font-bold">ต่ำสุดในรุ่น</p>
+                        <p id="minTotal" class="text-xl font-bold">0</p>
                     </div>
-                    <span id="percentEng" class="bg-purple-50 text-purple-600 text-xs font-bold px-3 py-1 rounded-full">0%</span>
+                    <div>
+                        <p class="text-xs text-indigo-200 uppercase tracking-wider mb-1 font-bold">ค่าเฉลี่ยรวม</p>
+                        <p id="avgTotal" class="text-xl font-bold">0</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white flex flex-col md:flex-row justify-between items-center shadow-lg">
-                <div class="mb-4 md:mb-0 text-center md:text-left">
-                    <h4 class="text-2xl font-bold">คะแนนรวมทั้งหมด</h4>
-                    <p class="text-indigo-100">ระบบประมวลผลคะแนนสุทธิ</p>
-                </div>
-                <div class="text-center md:text-right">
-                    <span id="scoreTotal" class="text-6xl font-black">0</span>
-                    <span class="text-2xl font-light opacity-80">/ 100</span>
-                </div>
-            </div>
-
-            <div class="flex justify-center no-print">
-                <button onclick="searchAnother()" class="bg-white border-2 border-gray-200 text-gray-600 px-12 py-3 rounded-xl font-bold hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm">
-                    ค้นหาใหม่
+            <div class="flex flex-col md:flex-row justify-center gap-4 no-print">
+                <button onclick="searchAnother()" class="bg-white border-2 border-gray-200 text-gray-600 px-8 py-3 rounded-xl font-bold hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm flex items-center justify-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                    <span>ค้นหาใหม่</span>
                 </button>
+                <a href="https://vichakarn.samroiwit.ac.th/เพชรสามรอยยอด" class="bg-slate-700 text-white px-8 py-3 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-md flex items-center justify-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    <span>กลับสู่หน้าหลัก</span>
+                </a>
             </div>
         </div>
 
@@ -171,12 +169,15 @@
             <div class="text-red-500 text-6xl mb-4">⚠️</div>
             <h3 class="text-2xl font-bold text-gray-800 mb-2">ไม่พบข้อมูลคะแนน</h3>
             <p class="text-gray-500 mb-6">กรุณาตรวจสอบเลขบัตรประชาชนใหม่อีกครั้ง</p>
-            <button onclick="searchAnother()" class="text-indigo-600 font-bold hover:underline">ลองใหม่อีกครั้ง</button>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4">
+                <button onclick="searchAnother()" class="text-indigo-600 font-bold hover:underline">ลองใหม่อีกครั้ง</button>
+                <span class="hidden md:inline text-gray-300">|</span>
+                <a href="https://vichakarn.samroiwit.ac.th/เพชรสามรอยยอด" class="text-slate-500 font-bold hover:underline">กลับหน้าหลัก</a>
+            </div>
         </div>
     </main>
 
     <script>
-        // ข้อมูล Spreadsheet
         const SHEET_ID = '1V0oAKxG6Mp-20StukOwo0s7wLHa9PMbJVL-xUynIgrY'; 
         
         const COL_ID = 'เลขบัตรประชาชน';
@@ -226,21 +227,26 @@
 
         function displayResult(studentRow, header, allRows) {
             const getData = (row, name) => row[header.indexOf(name)] || '0';
-            
-            // 1. แสดงชื่อ
+            const dataRows = allRows.filter(r => r[header.indexOf(COL_ID)] && r !== header);
+
+            const calculateStats = (colName) => {
+                const colIndex = header.indexOf(colName);
+                const scores = dataRows.map(r => parseFloat(r[colIndex])).filter(s => !isNaN(s));
+                if (scores.length === 0) return { max: 0, min: 0, avg: 0 };
+                const sum = scores.reduce((a, b) => a + b, 0);
+                return {
+                    max: Math.max(...scores),
+                    min: Math.min(...scores),
+                    avg: (sum / scores.length).toFixed(2)
+                };
+            };
+
             document.getElementById('displayStudentName').textContent = getData(studentRow, COL_NAME);
-            
-            // 2. ลำดับที่
             const rankValue = getData(studentRow, COL_RANK);
             document.getElementById('displayRank').textContent = rankValue;
-            
-            // 3. ควบคุมการแสดงถ้วยรางวัล
             updateTrophy(parseInt(rankValue));
+            document.getElementById('displayTotalStudents').textContent = dataRows.length;
 
-            const totalStudents = allRows.filter(r => r[header.indexOf(COL_ID)] && r !== header).length;
-            document.getElementById('displayTotalStudents').textContent = totalStudents;
-
-            // 4. คะแนนรายวิชา
             const config = [
                 { id: 'Math', key: COL_MATH, max: 30 },
                 { id: 'Sci',  key: COL_SCI,  max: 30 },
@@ -251,44 +257,53 @@
             config.forEach(item => {
                 const score = parseFloat(getData(studentRow, item.key)) || 0;
                 const percent = Math.round((score / item.max) * 100);
+                
                 document.getElementById(`score${item.id}`).textContent = score;
                 document.getElementById(`percent${item.id}`).textContent = `${percent}%`;
+
+                const stats = calculateStats(item.key);
+                document.getElementById(`max${item.id}`).textContent = stats.max;
+                document.getElementById(`min${item.id}`).textContent = stats.min;
+                document.getElementById(`avg${item.id}`).textContent = stats.avg;
                 
                 const circumference = 283;
                 const offset = circumference - (percent / 100) * circumference;
-                
                 setTimeout(() => {
                     const circle = document.getElementById(`circle${item.id}`);
-                    circle.style.strokeDasharray = circumference;
-                    circle.style.strokeDashoffset = offset;
+                    if(circle) {
+                        circle.style.strokeDasharray = circumference;
+                        circle.style.strokeDashoffset = offset;
+                    }
                 }, 100);
             });
             
             document.getElementById('scoreTotal').textContent = getData(studentRow, COL_TOTAL);
+            const totalStats = calculateStats(COL_TOTAL);
+            document.getElementById('maxTotal').textContent = totalStats.max;
+            document.getElementById('minTotal').textContent = totalStats.min;
+            document.getElementById('avgTotal').textContent = totalStats.avg;
+
             document.getElementById('searchResults').classList.remove('hidden');
             document.getElementById('searchResults').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // ฟังก์ชันใหม่สำหรับจัดการถ้วยรางวัล
         function updateTrophy(rank) {
             const container = document.getElementById('trophyContainer');
             const emoji = document.getElementById('trophyEmoji');
             const bg = document.getElementById('trophyBg');
-
-            container.classList.add('opacity-0'); // Reset animation
+            container.classList.add('opacity-0'); 
 
             if (rank >= 1 && rank <= 3) {
                 container.classList.remove('hidden');
                 setTimeout(() => container.classList.remove('opacity-0'), 100);
-                
                 if (rank === 1) {
-                    emoji.textContent = '🏆'; // ทอง
+                    emoji.textContent = '🏆';
                     bg.className = 'w-24 h-24 rounded-full flex items-center justify-center shadow-inner bg-yellow-100 border-2 border-yellow-400';
                 } else if (rank === 2) {
-                    emoji.textContent = '🥈'; // เงิน
+                    emoji.textContent = '🥈';
                     bg.className = 'w-24 h-24 rounded-full flex items-center justify-center shadow-inner bg-slate-100 border-2 border-slate-300';
                 } else if (rank === 3) {
-                    emoji.textContent = '🥉'; // ทองแดง
+                    emoji.textContent = '🥉';
                     bg.className = 'w-24 h-24 rounded-full flex items-center justify-center shadow-inner bg-orange-50 border-2 border-orange-300';
                 }
             } else {
@@ -299,7 +314,6 @@
         function hideAll() {
             document.getElementById('searchResults').classList.add('hidden');
             document.getElementById('noResults').classList.add('hidden');
-            document.getElementById('trophyContainer').classList.add('hidden');
         }
 
         function searchAnother() {
@@ -309,7 +323,7 @@
         }
 
         function parseCSV(text) {
-            return text.split(/\r?\n/).map(line => {
+            return text.split(/\r?\n/).filter(line => line.trim() !== "").map(line => {
                 const row = [];
                 let curr = '', inQ = false;
                 for (let i = 0; i < line.length; i++) {
