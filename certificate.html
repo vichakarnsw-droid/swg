@@ -34,10 +34,8 @@
 <body class="bg-slate-50 min-h-screen">
 
     <header class="bg-indigo-900 text-white shadow-xl">
-        <div class="max-w-4xl mx-auto px-6 py-10">
-            <div class="flex flex-col md:flex-row items-center justify-center md:space-x-6 text-center md:text-left">
-                <img src="https://via.placeholder.com/80" alt="Logo" class="w-20 h-20 rounded-full bg-white p-1 mb-4 md:mb-0 shadow-lg">
-                
+        <div class="max-w-4xl mx-auto px-6 py-12"> <div class="flex flex-col md:flex-row items-center justify-center md:space-x-6 text-center md:text-left">
+                <img src="school.logo.png" alt="Logo" class="w-20 h-20 rounded-full bg-white p-1 mb-4 md:mb-0 shadow-lg">
                 <div>
                     <h1 class="text-3xl md:text-5xl font-extrabold mb-1">โครงการเพชรสามร้อยยอด</h1>
                     <p class="text-indigo-200 text-base md:text-xl font-light">ระบบตรวจสอบและดาวน์โหลดเกียรติบัตรอัตโนมัติ</p>
@@ -46,7 +44,8 @@
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 -mt-8 pb-12">
+    <main class="max-w-4xl mx-auto px-4 pt-12 -mt-10 pb-12">
+        
         <div id="searchSection" class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-t-8 border-indigo-500">
             <div class="max-w-md mx-auto text-center">
                 <div class="mb-6">
@@ -72,7 +71,7 @@
             </div>
         </div>
 
-        <div id="resultArea" class="hidden mt-8 space-y-6 fade-in text-center">
+        <div id="resultArea" class="hidden space-y-6 fade-in text-center mt-6">
             <div class="bg-white rounded-2xl shadow-md p-8 border-l-8 border-emerald-500">
                 <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">ข้อมูลผู้เข้าร่วมโครงการ</p>
                 <h2 id="studentName" class="text-3xl md:text-4xl font-black text-gray-800 mt-2">-</h2>
@@ -98,7 +97,7 @@
                         <span>ดาวน์โหลดเกียรติบัตร (JPG)</span>
                     </a>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-lg mt-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-lg mt-6">
                         <button onclick="resetSearch()" class="btn-outline font-bold py-4 px-6 rounded-2xl flex items-center justify-center space-x-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
@@ -118,19 +117,21 @@
             </div>
         </div>
 
-        <div id="errorArea" class="hidden mt-8 bg-white rounded-2xl shadow-lg p-12 text-center border-t-8 border-red-500 fade-in">
-            <div class="w-20 h-20 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6 font-bold text-4xl">!</div>
-            <h3 class="text-2xl font-bold text-gray-800 mb-2">ไม่พบข้อมูล</h3>
-            <p class="text-gray-500 mb-8 max-w-sm mx-auto">กรุณาตรวจสอบเลขบัตรให้ถูกต้อง หรือติดต่อเจ้าหน้าที่หากข้อมูลไม่ถูกต้อง</p>
-            
-            <div class="flex flex-col md:flex-row justify-center gap-4">
-                <button onclick="resetSearch()" class="bg-indigo-600 text-white px-10 py-4 rounded-2xl font-bold hover:bg-indigo-700 transition-all">
-                    ลองใหม่อีกครั้ง
-                </button>
-                <a href="https://vichakarn.samroiwit.ac.th/เพชรสามร้อยยอด" 
-                   class="bg-gray-100 text-gray-600 px-10 py-4 rounded-2xl font-bold hover:bg-gray-200 transition-all">
-                    กลับหน้าหลัก
-                </a>
+        <div id="errorArea" class="hidden space-y-6 fade-in text-center mt-6">
+            <div class="bg-white rounded-2xl shadow-lg p-12 border-t-8 border-red-500">
+                <div class="w-20 h-20 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6 font-bold text-4xl">!</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">ไม่พบข้อมูล</h3>
+                <p class="text-gray-500 mb-8 max-w-sm mx-auto">กรุณาตรวจสอบเลขบัตรให้ถูกต้อง หรือติดต่อเจ้าหน้าที่หากข้อมูลไม่ถูกต้อง</p>
+                
+                <div class="flex flex-col md:flex-row justify-center gap-4">
+                    <button onclick="resetSearch()" class="bg-indigo-600 text-white px-10 py-4 rounded-2xl font-bold hover:bg-indigo-700 transition-all">
+                        ลองใหม่อีกครั้ง
+                    </button>
+                    <a href="https://vichakarn.samroiwit.ac.th/เพชรสามร้อยยอด" 
+                       class="bg-gray-100 text-gray-600 px-10 py-4 rounded-2xl font-bold hover:bg-gray-200 transition-all">
+                        กลับหน้าหลัก
+                    </a>
+                </div>
             </div>
         </div>
     </main>
@@ -185,7 +186,7 @@
                     if (fileData.success) {
                         document.getElementById('studentName').textContent = name;
                         downloadLink.href = fileData.downloadUrl;
-                        searchSection.classList.add('hidden'); // ซ่อนส่วนค้นหาเมื่อเจอ
+                        searchSection.classList.add('hidden');
                         resultArea.classList.remove('hidden');
                     } else {
                         searchSection.classList.add('hidden');
@@ -220,7 +221,7 @@
 
         function resetSearch() {
             document.getElementById('searchId').value = '';
-            searchSection.classList.remove('hidden'); // แสดงส่วนค้นหาใหม่
+            searchSection.classList.remove('hidden');
             resultArea.classList.add('hidden');
             errorArea.classList.add('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
