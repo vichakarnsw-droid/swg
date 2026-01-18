@@ -97,7 +97,7 @@
                     subjects.forEach(s => {
                         document.write(`
                             <div class="grade-card bg-white p-6 rounded-3xl shadow-md border border-gray-100 flex flex-col items-center">
-                                <p class="text-gray-500 font-bold mb-4">${s.name}</p>
+                                <p class="text-gray-600 font-bold mb-4 text-lg">${s.name}</p>
                                 <div class="relative w-32 h-32 mb-4">
                                     <svg class="w-full h-full" viewBox="0 0 100 100">
                                         <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
@@ -110,10 +110,19 @@
                                 </div>
                                 <span id="percent${s.id}" class="bg-${s.color}-50 text-${s.color}-600 text-xs font-bold px-3 py-1 rounded-full mb-4">0%</span>
                                 
-                                <div class="w-full pt-3 border-t border-gray-100 grid grid-cols-3 gap-1 text-xs text-center">
-                                    <div><p class="text-red-500 font-semibold mb-0.5">สูงสุด</p><p id="max${s.id}" class="font-bold text-gray-700">-</p></div>
-                                    <div><p class="text-slate-400 font-semibold mb-0.5">ต่ำสุด</p><p id="min${s.id}" class="font-bold text-gray-700">-</p></div>
-                                    <div><p class="text-blue-500 font-semibold mb-0.5">เฉลี่ย</p><p id="avg${s.id}" class="font-bold text-gray-700">-</p></div>
+                                <div class="w-full pt-4 border-t border-gray-100 grid grid-cols-3 gap-1 text-center">
+                                    <div>
+                                        <p class="text-[11px] text-red-500 font-bold uppercase mb-0.5">สูงสุด</p>
+                                        <p id="max${s.id}" class="text-sm font-bold text-gray-800">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[11px] text-slate-400 font-bold uppercase mb-0.5">ต่ำสุด</p>
+                                        <p id="min${s.id}" class="text-sm font-bold text-gray-800">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[11px] text-blue-500 font-bold uppercase mb-0.5">เฉลี่ย</p>
+                                        <p id="avg${s.id}" class="text-sm font-bold text-gray-800">-</p>
+                                    </div>
                                 </div>
                             </div>
                         `);
