@@ -10,8 +10,6 @@
         body { font-family: 'Sarabun', sans-serif; }
         .fade-in { animation: fadeIn 0.6s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .loader { border-top-color: #4f46e5; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen">
@@ -45,11 +43,14 @@
                 <h2 id="studentName" class="text-3xl font-black text-gray-800 mt-1">-</h2>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-xl p-6 border-t-8 border-emerald-500">
-                <p class="text-gray-500 mb-4">รูปภาพตัวอย่างเกียรติบัตรของคุณ</p>
-                
-                <div id="imageWrapper" class="mb-8 hidden">
-                    <img id="imgPreview" src="" alt="Certificate Preview" class="mx-auto rounded-lg shadow-lg border max-w-full h-auto">
+            <div class="bg-white rounded-2xl shadow-xl p-10 border-t-8 border-emerald-500">
+                <div class="mb-8">
+                    <div class="mx-auto w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <p class="text-gray-600 text-lg">ตรวจสอบข้อมูลเรียบร้อยแล้ว คุณสามารถดาวน์โหลดไฟล์ได้ที่ปุ่มด้านล่าง</p>
                 </div>
 
                 <a id="downloadLink" href="#" target="_blank" 
@@ -57,7 +58,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                    <span>ดาวน์โหลดไฟล์รูปภาพ (JPG)</span>
+                    <span>ดาวน์โหลดเกียรติบัตร (JPG)</span>
                 </a>
             </div>
             
@@ -69,7 +70,7 @@
         <div id="errorArea" class="hidden mt-8 bg-white rounded-2xl shadow-lg p-10 text-center border-t-4 border-red-500 fade-in">
             <div class="text-red-500 text-5xl mb-4 text-center">✕</div>
             <h3 class="text-xl font-bold text-gray-800">ไม่พบไฟล์เกียรติบัตร</h3>
-            <p class="text-gray-500 mb-6">กรุณาตรวจสอบเลขบัตรให้ถูกต้อง หรือไฟล์ในระบบอาจจะยังไม่มีนามสกุล .jpg</p>
+            <p class="text-gray-500 mb-6">กรุณาตรวจสอบเลขบัตรให้ถูกต้อง หรือติดต่อเจ้าหน้าที่หากข้อมูลไม่ถูกต้อง</p>
             <button onclick="resetSearch()" class="bg-slate-100 text-slate-700 px-8 py-3 rounded-xl font-bold hover:bg-slate-200 transition-all">
                 ลองอีกครั้ง
             </button>
@@ -77,7 +78,7 @@
     </main>
 
     <script>
-        // --- ส่วนการตั้งค่า (ตรวจสอบให้ตรงกับงานของคุณ) ---
+        // --- การตั้งค่าเดิม ---
         const SHEET_ID = '1So7xwSZrvbUYqeBaJanqXU81H-ImwL5jLs6ksSf6CvE';
         const DRIVE_FOLDER_ID = '1otF1ScTQm01pFxfriEwzduBCtum-z2xA'; 
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZ3SGEJ9Et89OOMz0p3STcO5pLWcAwbe4ZDmPrUMHBN_6qkp2pGD4h522X7WHTUplpnA/exec';
@@ -87,8 +88,6 @@
         const errorArea = document.getElementById('errorArea');
         const btnText = document.getElementById('btnText');
         const loader = document.getElementById('loadingIcon');
-        const imgPreview = document.getElementById('imgPreview');
-        const imageWrapper = document.getElementById('imageWrapper');
 
         searchForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -97,10 +96,9 @@
             setLoading(true);
             resultArea.classList.add('hidden');
             errorArea.classList.add('hidden');
-            imageWrapper.classList.add('hidden');
 
             try {
-                // 1. ดึงข้อมูลรายชื่อจาก Google Sheets
+                // 1. ดึงข้อมูลจาก Google Sheets
                 const response = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`);
                 const csvText = await response.text();
                 const rows = parseCSV(csvText);
@@ -111,33 +109,25 @@
                 if (student) {
                     const name = student[header.indexOf('ชื่อนักเรียน')];
                     
-                    // 2. เรียก Google Apps Script เพื่อดึงลิงก์ไฟล์รูปภาพ
+                    // 2. เรียก Script เพื่อหาไฟล์ใน Drive
                     const finalScriptUrl = `${SCRIPT_URL}?id=${idInput}&folderId=${DRIVE_FOLDER_ID}`;
-                    
                     const fileResponse = await fetch(finalScriptUrl);
                     const fileData = await fileResponse.json();
 
                     if (fileData.success) {
                         document.getElementById('studentName').textContent = name;
-                        
-                        // ตั้งค่ารูป Preview และ ลิงก์ดาวน์โหลด
-                        imgPreview.src = fileData.viewUrl;
+                        // ตั้งค่าลิงก์ดาวน์โหลดอย่างเดียว
                         document.getElementById('downloadLink').href = fileData.downloadUrl;
-                        
-                        // แสดงพื้นที่ผลลัพธ์
                         resultArea.classList.remove('hidden');
-                        imageWrapper.classList.remove('hidden');
                     } else {
-                        // พบรายชื่อในตาราง แต่ไม่พบไฟล์รูปใน Drive
                         errorArea.classList.remove('hidden');
                     }
                 } else {
-                    // ไม่พบเลขบัตรในตาราง Google Sheets
                     errorArea.classList.remove('hidden');
                 }
             } catch (err) {
                 console.error(err);
-                alert('ระบบขัดข้อง: ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตหรือสิทธิ์การเข้าถึง Folder');
+                alert('ระบบขัดข้อง: โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ต');
             } finally {
                 setLoading(false);
             }
@@ -160,7 +150,6 @@
             document.getElementById('searchId').value = '';
             resultArea.classList.add('hidden');
             errorArea.classList.add('hidden');
-            imgPreview.src = '';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
